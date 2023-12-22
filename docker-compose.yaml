@@ -1,0 +1,16 @@
+version: "3.1"
+
+services:
+  postgresql:
+    image: dtasev/splitit:db
+    restart: always
+    # expose:
+    #   - "5432"
+    # ports:
+    #   - "5432:5432"
+    environment:
+      - PGDATA: /var/lib/postgresql/data/pgdata
+      - POSTGRES_PASSWORD: bzr6t2dd2g775c8oyibz
+    volumes:
+      - /home/dimtasev/pgdata:/var/lib/postgresql/data:rw
+    container_name: splitit-psql

@@ -1,0 +1,5 @@
+branch="$(git symbolic-ref --short HEAD)"
+sha="$(git rev-parse --short HEAD)"
+tag="${branch}-${sha}"
+image_repo="dtasev/splitit"
+image_name="${image_repo}:${tag}"
