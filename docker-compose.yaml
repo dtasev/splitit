@@ -2,7 +2,7 @@ version: "3.1"
 
 services:
   postgresql:
-    image: dtasev/splitit:db
+    image: postgres:16.1-bookworm
     restart: always
     # expose:
     #   - "5432"
