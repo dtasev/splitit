@@ -17,9 +17,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.authtoken import views
+from rest_framework.routers import DefaultRouter
+from .bill.views import DebtView
+
+router = DefaultRouter()
+router.register('debts', DebtView, basename="debts")
 
 urlpatterns = [
     path('api/admin/', admin.site.urls),
     path("api/accounts/", include("django.contrib.auth.urls")),
     path('api/token-auth/', views.obtain_auth_token),
+    path('api/', include(router.urls))
 ]

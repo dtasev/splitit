@@ -1,8 +1,10 @@
-import { memo, useEffect, useRef } from 'react';
+import { PropsWithChildren, memo, useEffect, useRef } from 'react';
 import { useCookies } from 'react-cookie';
 
-
-export default memo(function Login() {
+interface LoginProps {
+    onSuccess: (arg0: any) => void;
+}
+export default memo(function Login(props: PropsWithChildren<LoginProps>) {
     const usernameRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
 
@@ -19,20 +21,24 @@ export default memo(function Login() {
                     "password": passwordRef?.current?.value
                 }),
             }).then((resp) => {
-                console.log(resp, resp.headers);
-            })
+                return resp.json();
+            }).then((json) => {
+                props.onSuccess(json)
+            });
     };
     return (<>
         <form>
             <input type="hidden" name="csrftoken" value={cookies.csrftoken} />
             <div className="input-group">
-                <label htmlFor="username">Username</label>
+                <span className='input-group-text'>Username</span>
                 <input ref={usernameRef} type="text" name="username" id="username" className='input form-control' />
-
-                <label htmlFor="password">Password</label>
-                <input ref={passwordRef} type="text" name="password" id="password" className='input form-control' />
             </div>
-            <button type='button' onClick={doLogin}>Login</button>
+
+            <div className="input-group">
+                <span className='input-group-text'>Password</span>
+                <input ref={passwordRef} type="text" name="password" id="password" className='input form-control' />
+                <button type='button' className='btn btn-primary' onClick={doLogin}>Login</button>
+            </div>
         </form>
     </>);
 })
