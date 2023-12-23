@@ -1,5 +1,5 @@
 set -ex
 
-cd backend && bash build.sh
-cd ../nginx && bash build.sh
+cd backend && bash build.sh $1
+cd ../nginx && bash build.sh $1
 cd .. && docker-compose up
