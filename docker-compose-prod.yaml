@@ -36,7 +36,6 @@ services:
       - django_staticfiles:/data/django/staticfiles
     depends_on:
       - django
-      - react
     container_name: splitit-nginx
 
 volumes:
