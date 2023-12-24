@@ -38,4 +38,4 @@ jobs:
           known_hosts: ${{ secrets.KNOWN_HOSTS }}
           if_key_exists: fail # replace / ignore / fail; optional (defaults to fail)
       - name: Check SSH
-        run: ssh -i /home/runner/.ssh/id_rsa_gcloud dimitar@35.196.180.252 git clone https://github.com/dtasev/splitit/ || cd splitit && git pull
+        run: ssh -i /home/runner/.ssh/id_rsa_gcloud dimitar@35.196.180.252 cd splitit && git pull
