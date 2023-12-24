@@ -29,7 +29,7 @@ jobs:
       - name: Build the backend
         run: cd backend && bash build.sh --push
       - name: Build the nginx proxy
-        run: cd nginx && bash build.sh --push
+        run: cd nginx-prod && bash build.sh --push
       - name: Install SSH key
         uses: shimataro/ssh-key-action@v2
         with:
