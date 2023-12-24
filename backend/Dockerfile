@@ -8,4 +8,6 @@ RUN pip install -r /app/requirements.txt
 
 COPY app /app
 
-CMD python /app/manage.py collectstatic --noinput && gunicorn --reload --bind 0.0.0.0:8001 --workers 10 wsgi:application
+CMD python /app/manage.py collectstatic --noinput \
+    && python /app/manage.py migrate --noinput \
+    && gunicorn --reload --bind 0.0.0.0:8001 --workers 10 wsgi:application
