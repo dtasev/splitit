@@ -30,12 +30,6 @@ jobs:
         run: cd backend && bash build.sh --push
       - name: Build the nginx proxy
         run: cd nginx && bash build.sh --push
-
-  deploy:
-    environment:
-      name: cloud-vm-prod
-    runs-on: ubuntu-latest
-    steps:
       - name: Install SSH key
         uses: shimataro/ssh-key-action@v2
         with:
