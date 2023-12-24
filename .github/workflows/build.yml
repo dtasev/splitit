@@ -14,7 +14,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  deploy:
+  build-and-push:
     environment:
       name: cloud-vm-prod
     runs-on: ubuntu-latest
@@ -31,3 +31,17 @@ jobs:
       - name: Build the nginx proxy
         run: cd nginx && bash build.sh --push
 
+  deploy:
+    environment:
+      name: cloud-vm-prod
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_KEY }}
+          name: id_rsa # optional
+          known_hosts: ${{ secrets.KNOWN_HOSTS }}
+          if_key_exists: fail # replace / ignore / fail; optional (defaults to fail)
+      - name: Check SSH
+        run: ssh dimtasev@35.196.180.252 git clone https://github.com/dtasev/splitit/ && cd splitit && git pull

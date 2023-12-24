@@ -25,19 +25,6 @@ services:
     depends_on:
       - postgresql
 
-  react:
-    image: dtasev/splitit:latest
-    restart: always
-    expose:
-      - "5173"
-    ports:
-      - "5273:5173"
-    volumes:
-      - ./app:/app:rw
-    depends_on:
-      - django
-    container_name: splitit-react
-
   nginx:
     image: dtasev/splitit-nginx:latest
     restart: always
