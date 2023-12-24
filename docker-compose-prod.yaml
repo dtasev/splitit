@@ -1,0 +1,57 @@
+version: "3.1"
+
+services:
+  postgresql:
+    image: postgres:16.1-bookworm
+    restart: always
+    expose:
+     - "5432"
+    environment:
+      - PGDATA=/var/lib/postgresql/data/pgdata
+      - POSTGRES_PASSWORD=bzr6t2dd2g775c8oyibz
+    volumes:
+      - ~/splitit-pgdata:/var/lib/postgresql/data:rw
+    container_name: splitit-psql
+
+  django:
+    image: dtasev/splitit-backend:latest
+    restart: always
+    expose:
+      - "8001"
+    volumes:
+      - ./backend/app:/app:rw
+      - django_staticfiles:/data/django/staticfiles
+    container_name: splitit-backend
+    depends_on:
+      - postgresql
+
+  react:
+    image: dtasev/splitit:latest
+    restart: always
+    expose:
+      - "5173"
+    ports:
+      - "5273:5173"
+    volumes:
+      - ./app:/app:rw
+    depends_on:
+      - django
+    container_name: splitit-react
+
+  nginx:
+    image: dtasev/splitit-nginx:latest
+    restart: always
+    expose:
+      - "5555"
+    ports:
+      - "80:5555"
+    volumes:
+      - django_staticfiles:/data/django/staticfiles
+    depends_on:
+      - django
+      - react
+    container_name: splitit-nginx
+
+volumes:
+  django_staticfiles:
+    driver: local
