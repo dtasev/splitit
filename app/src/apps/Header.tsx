@@ -1,5 +1,4 @@
 import { PropsWithChildren, memo } from "react";
-import Login from "./Login";
 
 interface HeaderProps {
     loginElem: JSX.Element

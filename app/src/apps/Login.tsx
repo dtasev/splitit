@@ -1,16 +1,24 @@
-import { PropsWithChildren, memo, useEffect, useRef } from 'react';
+import { PropsWithChildren, memo, useEffect, useRef, useState } from 'react';
+import { Container, Row } from 'react-bootstrap';
 import { useCookies } from 'react-cookie';
 
 interface LoginProps {
     onSuccess: (arg0: any) => void;
 }
 export default memo(function Login(props: PropsWithChildren<LoginProps>) {
+    const [loggedIn, setLoggedIn] = useState<boolean>(false);
     const usernameRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
 
-    const [cookies, _] = useCookies(["csrftoken"]);
+    const [cookies, setCookies] = useCookies(["apitoken", "username"]);
     const doLogin = () => {
-        fetch("http://localhost:5555/api/token-auth/",
+        if (cookies.username && cookies.apitoken) {
+            props.onSuccess({ username: cookies.username, token: cookies.apitoken });
+            setLoggedIn(true);
+            return;
+        }
+
+        fetch("/api/token-auth/",
             {
                 method: "POST",
                 headers: {
@@ -21,14 +29,29 @@ export default memo(function Login(props: PropsWithChildren<LoginProps>) {
                     "password": passwordRef?.current?.value
                 }),
             }).then((resp) => {
+                if (resp.status >= 400) {
+                    throw new Error();
+                }
                 return resp.json();
             }).then((json) => {
-                props.onSuccess(json)
+                setLoggedIn(true);
+                setCookies("username", usernameRef?.current?.value);
+                setCookies("apitoken", json.token);
+                props.onSuccess({ username: usernameRef?.current?.value, token: json.token });
             });
     };
-    return (<>
+
+    const doLogout = () => {
+        setLoggedIn(false);
+        setCookies("username", "");
+        setCookies("apitoken", "");
+        props.onSuccess({ username: "", token: "" });
+    }
+
+    useEffect(() => doLogin(), []);
+
+    const loginForm = (
         <form>
-            <input type="hidden" name="csrftoken" value={cookies.csrftoken} />
             <div className="input-group">
                 <span className='input-group-text'>Username</span>
                 <input ref={usernameRef} type="text" name="username" id="username" className='input form-control' />
@@ -40,5 +63,12 @@ export default memo(function Login(props: PropsWithChildren<LoginProps>) {
                 <button type='button' className='btn btn-primary' onClick={doLogin}>Login</button>
             </div>
         </form>
-    </>);
+    );
+
+    const logOutForm = <form>
+        <div className='d-flex flex-row-reverse'></div>
+        <button type='button' className='btn btn-primary' onClick={doLogout}>Logout</button>
+    </form>
+
+    return <Container><Row>{loggedIn ? logOutForm : loginForm}</Row></Container>;
 })

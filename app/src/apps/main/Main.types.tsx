@@ -9,4 +9,6 @@ interface DebtApiResponse {
     description: string
     owner: number
     is_owed: number
+    owner_username: string
+    is_owed_username: string
 }

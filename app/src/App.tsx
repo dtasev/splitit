@@ -6,24 +6,21 @@ import { createContext, useState } from 'react';
 import Login from './apps/Login';
 import { Container } from 'react-bootstrap';
 
-const UserContext = createContext<string>("");
 
-interface LoginResponse {
-  token: string,
-}
+const UserContext = createContext<UserContextI>({ username: null, token: null });
 
 function App() {
 
-  const [token, setToken] = useState<string>("");
+  const [userDeets, setUserDeets] = useState<UserContextI>({ username: null, token: null });
 
-  const onSuccessLogin = (json: LoginResponse) => {
-    setToken(json.token);
+  const onSuccessLogin = (json: UserContextI) => {
+    setUserDeets(json);
   }
   const loginElem = <Login onSuccess={onSuccessLogin} />;
 
   return (
     <>
-      <UserContext.Provider value={token}>
+      <UserContext.Provider value={userDeets}>
         <Container fluid={true}>
           <Header loginElem={loginElem} />
           <Main />

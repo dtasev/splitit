@@ -1,27 +1,49 @@
-import { PropsWithChildren, memo } from 'react';
-import { Col, Row } from 'react-bootstrap';
+import { PropsWithChildren, memo, useContext } from 'react';
+import { Col, Container, Row } from 'react-bootstrap';
 import moment from 'moment';
+import { UserContext } from '../../App';
+
+import './Main.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPencil, faXmark } from '@fortawesome/free-solid-svg-icons';
+import DebtRowPaidInline from './DebtRowPaidInline';
+
 
 interface DebtRowProps {
-    debt: DebtApiResponse
+    debt: DebtApiResponse;
+    editDebt: (debt: DebtApiResponse) => void;
+    onDelete: () => void;
 }
 export default memo(function DebtRow(props: PropsWithChildren<DebtRowProps>) {
-    const paid = props.debt.amount * props.debt.ratio / 100;
-    const owed = Math.abs(paid - props.debt.amount);
+    const userCtx = useContext<UserContextI>(UserContext);
     const date = moment(props.debt.added).format('YYYY-MM-DD');
+
+    const deleteUrl = `/api/debts/${props.debt.id}`
+    const deleteDebt = () => {
+        fetch(deleteUrl, {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Token ${userCtx.token}`
+            }
+        }).then(() => {
+            props.onDelete();
+        });
+    }
+
     return (
-        <Row>
-            <Col>{date}</Col>
-            <Col>{props.debt.title}</Col>
-            <Col>amount: {props.debt.amount} ratio: {props.debt.ratio}</Col>
-            <Col>
-                <Row>you paid</Row>
-                <Row>{paid}</Row>
-            </Col>
-            <Col>
-                <Row>you lent</Row>
-                <Row>{owed}</Row>
-            </Col>
-        </Row>
+        <Container className='border border-collapse'>
+            <Row>
+                <Col className='my-auto mx-auto'>{date}</Col>
+                <Col className='my-auto text-start'>{props.debt.title}</Col>
+                {/* <Col>amount: {props.debt.amount} ratio: {props.debt.ratio}</Col> */}
+                <DebtRowPaidInline owner={userCtx.username === props.debt.owner_username} debt={props.debt} />
+                <Col className='my-auto'>
+                    <a className="icon-link" href="#" onClick={() => props.editDebt(props.debt)}><FontAwesomeIcon icon={faPencil}></FontAwesomeIcon></a>
+                </Col>
+                <Col className='my-auto'>
+                    <a className="icon-link" href="#" onClick={deleteDebt}><FontAwesomeIcon icon={faXmark}></FontAwesomeIcon></a>
+                </Col>
+            </Row>
+        </Container>
     );
 })

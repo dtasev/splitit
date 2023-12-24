@@ -5,7 +5,9 @@ import { Button } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
 
 interface ModalProps {
-
+    onSuccess: () => void;
+    onClose?: () => void;
+    debt?: DebtApiResponse;
 }
 
 export default memo(function ExpenseModal(props: PropsWithChildren<ModalProps>) {
@@ -13,35 +15,46 @@ export default memo(function ExpenseModal(props: PropsWithChildren<ModalProps>) 
     const title = useRef<HTMLInputElement>(null);
     const amount = useRef<HTMLInputElement>(null);
     const ratio = useRef<HTMLInputElement>(null);
+    const added = useRef<HTMLInputElement>(null);
 
     const [ratioNote, setRatioNote] = useState<string>("");
 
     const [cookies, _] = useCookies(["csrftoken"]);
-    const token = useContext(UserContext);
+    const userCtx = useContext(UserContext);
 
-    const [show, setShow] = useState<boolean>(false);
+    const [show, setShow] = useState<boolean>(props.debt ? true : false);
 
-    const handleClose = () => setShow(false);
+    const handleClose = () => {
+        setShow(false);
+        if (props.onClose) { props.onClose(); }
+    };
     const handleShow = () => setShow(true);
 
     const saveDebt = () => {
-        fetch(`/api/debts/`, {
-            method: "POST",
+        const url = props.debt ? `/api/debts/${props.debt.id}/` : `/api/debts/`;
+        const method = props.debt ? "PATCH" : "POST";
+        fetch(url, {
+            method: method,
             headers: {
                 "Content-Type": "application/json",
                 "X-CsrfToken": cookies.csrftoken,
-                "Authorization": `Token ${token}`,
+                "Authorization": `Token ${userCtx.token}`,
             },
             body: JSON.stringify({
                 is_owed: other.current?.value,
                 title: title.current?.value,
                 amount: amount.current?.value,
                 ratio: ratio.current?.value,
+                added: added.current?.value,
             })
         }).then((res) => {
-            if (res.status >= 400 && res.status < 500) { throw new Error() }
-            handleClose();
-        })
+            if (res.status >= 400) {
+                throw new Error();
+            } else {
+                props.onSuccess();
+                handleClose();
+            }
+        });
     }
 
     const updateRatioNote = () => {
@@ -52,12 +65,12 @@ export default memo(function ExpenseModal(props: PropsWithChildren<ModalProps>) 
         }
     }
 
+    const button = props.debt ? null : <Button variant="primary" onClick={handleShow}>Add expense</Button>;
+    const defaultDate = new Date().toLocaleDateString("en-CA");
+
     return (
         <>
-            <Button variant="primary" onClick={handleShow}>
-                Add expense
-            </Button>
-
+            {button}
             <Modal show={show} onHide={handleClose} centered>
                 <Modal.Header closeButton>
                     <Modal.Title>Modal heading</Modal.Title>
@@ -65,23 +78,27 @@ export default memo(function ExpenseModal(props: PropsWithChildren<ModalProps>) 
                 <Modal.Body>
                     <div className='input-group'>
                         <label className='form-label' htmlFor="is_owed">With you and: </label>
-                        <input ref={other} className='form-control' id='is_owed' name='is_owed' type="text" required />
+                        <input ref={other} className='form-control' id='is_owed' name='is_owed' type="text" required defaultValue={props.debt?.is_owed_username || ""} />
                     </div>
                     <div className='input-group'>
                         <span className="input-group-text">Description</span>
-                        <input ref={title} className='form-control' id='title' name='title' type="text" placeholder='Description' required />
+                        <input ref={title} className='form-control' id='title' name='title' type="text" placeholder='Description' required defaultValue={props.debt?.title || ""} />
                     </div>
                     <div className='input-group'>
                         <span className="input-group-text">£</span>
-                        <input ref={amount} className='form-control' id='amount' name='amount' type="number" min={0} onChange={updateRatioNote} />
+                        <input ref={amount} className='form-control' id='amount' name='amount' type="number" min={0} onChange={updateRatioNote} defaultValue={props.debt?.amount || ""} />
                         <span className="input-group-text">Ratio</span>
-                        <input ref={ratio} className='form-control' id='ratio' name='ratio' type="number" min={1} max={100} step={1} defaultValue={50} onChange={updateRatioNote} />
+                        <input ref={ratio} className='form-control' id='ratio' name='ratio' type="number" min={1} max={100} step={1} defaultValue={props.debt?.ratio || 50} onChange={updateRatioNote} />
                     </div>
 
                     <div className='text-center'>
                         <span>{ratioNote}</span>
                     </div>
 
+                    <div className='input-group'>
+                        <span className="input-group-text">Date</span>
+                        <input ref={added} className='form-control' type='date' name="added" id="added" defaultValue={defaultDate}></input>
+                    </div>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>

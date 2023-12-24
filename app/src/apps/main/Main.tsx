@@ -1,20 +1,22 @@
-import { memo, useContext, useEffect, useState } from 'react';
-import { Col, Container, ModalDialog, Row } from 'react-bootstrap';
+import React, { memo, useContext, useEffect, useState } from 'react';
+import { Col, Container, Row } from 'react-bootstrap';
 import DebtRowFactory from './DebtRowFactory';
 import ExpenseModal from './Modal';
 import { UserContext } from '../../App';
+import SideBarRight from './SideBarRight';
 
 
 
 export default memo(function Main() {
     const [debtsJson, setDebtsJson] = useState<DebtApiResponse[]>([]);
-    const token = useContext(UserContext);
+    const userCtx = useContext<UserContextI>(UserContext);
+    const [editModal, setEditModal] = useState<React.JSX.Element>();
 
-    useEffect(() => {
+    const fetchDebts = () => {
         fetch(`/api/debts/`,
             {
                 headers: {
-                    "Authorization": `Token ${token}`
+                    "Authorization": `Token ${userCtx.token}`
                 }
             }
         ).then((res) => {
@@ -26,24 +28,35 @@ export default memo(function Main() {
             console.error(err);
             setDebtsJson([]);
         })
-    }, [token]);
+    }
+
+    const clearEditDebt = () => {
+        setEditModal(undefined);
+    }
+
+    const editDebt = (debt: DebtApiResponse) => {
+        setEditModal(<ExpenseModal onSuccess={fetchDebts} onClose={clearEditDebt} debt={debt} />);
+    };
+
+    useEffect(fetchDebts, [userCtx]);
 
     return (
         <Container fluid={true}>
             <Row>
-                <Col className='col-lg-2'>
+                <Col className='col-lg-2 col-md-12 col-sm-12 col-xs-12'>
                     <p>Side bar left</p>
                 </Col>
-                <Col className='col-lg-8'>
+                <Col className='col-lg-8 col-md-12 col-sm-12 col-xs-12'>
                     <Row>
-                        <ExpenseModal />
+                        {editModal}
+                        <ExpenseModal onSuccess={fetchDebts} />
                     </Row>
                     <Row className='border'>
-                        <DebtRowFactory debtsJson={debtsJson} />
+                        <DebtRowFactory debtsJson={debtsJson} onDelete={fetchDebts} editDebt={editDebt} />
                     </Row>
                 </Col>
-                <Col className='col-lg-2'>
-                    <p>Side bar Right</p>
+                <Col className='col-lg-2 col-md-12 col-sm-12 col-xs-12'>
+                    <SideBarRight debtsJson={debtsJson} />
                 </Col>
             </Row>
         </Container>
