@@ -19,3 +19,6 @@ class Debt(models.Model):
 
     title = models.CharField()
     description = models.TextField(blank=True)
+
+    def __str__(self) -> str:
+        return f"{self.title} - {self.owner} to {self.is_owed}"
