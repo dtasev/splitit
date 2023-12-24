@@ -13,7 +13,7 @@ export default memo(function Main() {
     const [editModal, setEditModal] = useState<React.JSX.Element>();
 
     const fetchDebts = () => {
-        fetch(`/api/debts/`,
+        fetch(`${import.meta.env.VITE_API_URL}/api/debts/`,
             {
                 headers: {
                     "Authorization": `Token ${userCtx.token}`

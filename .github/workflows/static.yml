@@ -33,7 +33,7 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Build the pages
-        run: bash build.sh --base=https://dtasev.github.io/splitit/
+        run: bash build.sh --base=https://dtasev.github.io/splitit/ --mode=production
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

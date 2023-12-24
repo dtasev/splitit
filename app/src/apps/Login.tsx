@@ -18,7 +18,7 @@ export default memo(function Login(props: PropsWithChildren<LoginProps>) {
             return;
         }
 
-        fetch("/api/token-auth/",
+        fetch(`${import.meta.env.VITE_API_URL}/api/token-auth/`,
             {
                 method: "POST",
                 headers: {

@@ -31,7 +31,7 @@ export default memo(function ExpenseModal(props: PropsWithChildren<ModalProps>) 
     const handleShow = () => setShow(true);
 
     const saveDebt = () => {
-        const url = props.debt ? `/api/debts/${props.debt.id}/` : `/api/debts/`;
+        const url = props.debt ? `${import.meta.env.VITE_API_URL}/api/debts/${props.debt.id}/` : `${import.meta.env.VITE_API_URL}/api/debts/`;
         const method = props.debt ? "PATCH" : "POST";
         fetch(url, {
             method: method,
