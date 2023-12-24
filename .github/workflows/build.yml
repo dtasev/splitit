@@ -26,7 +26,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Build the backend
+      # - name: Build the backend
       #   run: cd backend && bash build.sh --push
       # - name: Build the nginx proxy
       #   run: cd nginx && bash build.sh --push
