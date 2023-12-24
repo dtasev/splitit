@@ -34,6 +34,7 @@ services:
       - "80:5555"
     volumes:
       - django_staticfiles:/data/django/staticfiles
+      - ./nginx/nginx-prod.conf:/etc/nginx/nginx.conf
     depends_on:
       - django
     container_name: splitit-nginx
