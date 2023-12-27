@@ -34,7 +34,7 @@ services:
       - "80:5555"
     volumes:
       - django_staticfiles:/data/django/staticfiles
-      - /home/dimitar/splitit/app/dist:/app/dist/
+      - /home/dimitar/splitit/app/dist:/application
     depends_on:
       - django
     container_name: splitit-nginx
