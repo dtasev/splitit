@@ -32,7 +32,7 @@ class DebtView(viewsets.ModelViewSet):
 
     def get_queryset(self):
         query = Q(owner=self.request.user) | Q(is_owed=self.request.user)
-        return Debt.objects.filter(query).order_by("-pk", "-added")
+        return Debt.objects.filter(query).order_by("-added", "-pk")
 
     def create(self, request, *args, **kwargs):
         data = request.data
