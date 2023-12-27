@@ -20,28 +20,30 @@ export default memo(function DebtRow(props: PropsWithChildren<DebtRowProps>) {
 
     const deleteUrl = `${import.meta.env.VITE_API_URL}/api/debts/${props.debt.id}`
     const deleteDebt = () => {
-        fetch(deleteUrl, {
-            method: "DELETE",
-            headers: {
-                "Authorization": `Token ${userCtx.token}`
-            }
-        }).then(() => {
-            props.onDelete();
-        });
+        if (window.confirm(`Delete the entry for ${props.debt.title} on ${date}?`)) {
+            fetch(deleteUrl, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Token ${userCtx.token}`
+                }
+            }).then(() => {
+                props.onDelete();
+            });
+        }
     }
 
     return (
         <Container className='border border-collapse'>
             <Row>
-                <Col className='my-auto mx-auto'>{date}</Col>
-                <Col className='my-auto text-start'>{props.debt.title}</Col>
+                <Col className='my-auto mx-auto col-lg-2 col-5'>{date}</Col>
+                <Col className='my-auto text-lg-start col-lg-2 col-7'>{props.debt.title}</Col>
                 {/* <Col>amount: {props.debt.amount} ratio: {props.debt.ratio}</Col> */}
                 <DebtRowPaidInline owner={userCtx.username === props.debt.owner_username} debt={props.debt} />
-                <Col className='my-auto'>
-                    <a className="icon-link" href="#" onClick={() => props.editDebt(props.debt)}><FontAwesomeIcon icon={faPencil}></FontAwesomeIcon></a>
-                </Col>
-                <Col className='my-auto'>
-                    <a className="icon-link" href="#" onClick={deleteDebt}><FontAwesomeIcon icon={faXmark}></FontAwesomeIcon></a>
+                <Col className='my-auto col-lg-2 col-12'>
+                    <Row>
+                        <Col className='px-lg-2 col-6'><a className="icon-link" href="#" onClick={() => props.editDebt(props.debt)}><FontAwesomeIcon icon={faPencil}></FontAwesomeIcon></a></Col>
+                        <Col className='px-lg-2 col-6'><a className="icon-link" href="#" onClick={deleteDebt}><FontAwesomeIcon icon={faXmark}></FontAwesomeIcon></a></Col>
+                    </Row>
                 </Col>
             </Row>
         </Container>
