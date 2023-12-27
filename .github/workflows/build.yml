@@ -40,10 +40,10 @@ jobs:
           known_hosts: ${{ secrets.KNOWN_HOSTS }}
           if_key_exists: fail # replace / ignore / fail; optional (defaults to fail)
       - name: Pull latest
-        run: ssh -i /home/runner/.ssh/id_rsa_gcloud dimitar@35.196.180.252 bash -c "pwd && cd splitit && git pull"
+        run: ssh -i /home/runner/.ssh/id_rsa_gcloud dimitar@35.196.180.252 bash -c "cd splitit && git pull"
       - name: Build backend
-        run: ssh -i /home/runner/.ssh/id_rsa_gcloud dimitar@35.196.180.252 bash -c "pwd && cd splitit/backend && pwd && bash build.sh"
+        run: ssh -i /home/runner/.ssh/id_rsa_gcloud dimitar@35.196.180.252 bash -c "cd splitit/backend && bash build.sh"
       - name: Build nginx
-        run: ssh -i /home/runner/.ssh/id_rsa_gcloud dimitar@35.196.180.252 bash -c pwd && cd splitit/nginx && pwd && bash build.sh"
+        run: ssh -i /home/runner/.ssh/id_rsa_gcloud dimitar@35.196.180.252 bash -c "cd splitit/nginx && bash build.sh"
       - name: Compose -d
-        run: ssh -i /home/runner/.ssh/id_rsa_gcloud dimitar@35.196.180.252 bash -c "pwd && cd splitit && docker-compose -f docker-compose-prod.yaml up -d"
+        run: ssh -i /home/runner/.ssh/id_rsa_gcloud dimitar@35.196.180.252 bash -c "cd splitit && docker-compose -f docker-compose-prod.yaml up -d"
