@@ -34,9 +34,19 @@ jobs:
           known_hosts: ${{ secrets.KNOWN_HOSTS }}
           config: ${{ secrets.SSH_CONFIG }}
           if_key_exists: fail # replace / ignore / fail; optional (defaults to fail)
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            react:
+              - 'app/**'
+
       - name: Build vite prod
+        if: steps.changes.outputs.react == 'true'
         run: bash build.sh
+
       - name: SCP to remote
+        if: steps.changes.outputs.react == 'true'
         run: scp -r app/dist/ m-prod:~/splitit/app/
       # - name: Build the backend
       #   run: cd backend && bash build.sh --push
