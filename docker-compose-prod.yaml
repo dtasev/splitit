@@ -37,7 +37,7 @@ services:
     expose:
       - "5555"
     ports:
-      - 443:5555
+      - 80:5555
     volumes:
       - django_staticfiles:/data/django/staticfiles
       - /home/dimitar/splitit/app/dist:/application
