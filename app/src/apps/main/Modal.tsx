@@ -87,8 +87,10 @@ export default memo(function ExpenseModal(props: PropsWithChildren<ModalProps>) 
                     <div className='input-group'>
                         <span className="input-group-text">£</span>
                         <input ref={amount} className='form-control' id='amount' name='amount' type="number" min={0} onChange={updateRatioNote} defaultValue={props.debt?.amount || ""} />
-                        <span className="input-group-text">Ratio</span>
-                        <input ref={ratio} className='form-control' id='ratio' name='ratio' type="range" min={0} max={100} step={5} defaultValue={props.debt?.ratio || 50} onChange={updateRatioNote} />
+                    </div>
+                    <div className='border rounded'>
+                        <label htmlFor="ratio" className="form-label input-group-text">Ratio</label>
+                        <input ref={ratio} className='form-range' id='ratio' name='ratio' type="range" min={0} max={100} step={5} defaultValue={props.debt?.ratio || 50} onChange={updateRatioNote} />
                     </div>
 
                     <div className='text-center'>
