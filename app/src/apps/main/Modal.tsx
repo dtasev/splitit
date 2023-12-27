@@ -88,7 +88,7 @@ export default memo(function ExpenseModal(props: PropsWithChildren<ModalProps>) 
                         <span className="input-group-text">£</span>
                         <input ref={amount} className='form-control' id='amount' name='amount' type="number" min={0} onChange={updateRatioNote} defaultValue={props.debt?.amount || ""} />
                         <span className="input-group-text">Ratio</span>
-                        <input ref={ratio} className='form-control' id='ratio' name='ratio' type="number" min={1} max={100} step={1} defaultValue={props.debt?.ratio || 50} onChange={updateRatioNote} />
+                        <input ref={ratio} className='form-control' id='ratio' name='ratio' type="range" min={0} max={100} step={5} defaultValue={props.debt?.ratio || 50} onChange={updateRatioNote} />
                     </div>
 
                     <div className='text-center'>
