@@ -61,7 +61,7 @@ export default memo(function ExpenseModal(props: PropsWithChildren<ModalProps>) 
         if (other.current?.value && amount.current?.value) {
             const owedByYou = parseInt(amount.current?.value) * parseInt(ratio.current?.value) / 100;
             const owedByThem = Math.abs(owedByYou - parseInt(amount.current?.value));
-            setRatioNote(`You pay £${owedByYou} and they pay £${owedByThem}.`);
+            setRatioNote(`You pay £${owedByYou} and they pay £${owedByThem.toFixed(2)}`);
         }
     }
 
