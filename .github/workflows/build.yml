@@ -42,11 +42,11 @@ jobs:
               - 'app/**'
 
       - name: Build vite prod
-        if: steps.changes.outputs.react == 'true'
+        if: steps.changes.outputs.react == true
         run: bash build.sh
 
       - name: SCP to remote
-        if: steps.changes.outputs.react == 'true'
+        if: steps.changes.outputs.react == true
         run: scp -r app/dist/ m-prod:~/splitit/app/
       # - name: Build the backend
       #   run: cd backend && bash build.sh --push
