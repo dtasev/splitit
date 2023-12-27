@@ -25,16 +25,23 @@ services:
     depends_on:
       - postgresql
 
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - /home/dimitar/certbot/www/:/var/www/certbot/:rw
+      - /home/dimitar/certbot/conf/:/etc/letsencrypt/:rw
+
   nginx:
     image: dtasev/splitit-nginx:latest
     restart: always
     expose:
       - "5555"
     ports:
-      - "80:5555"
+      - 443:5555
     volumes:
       - django_staticfiles:/data/django/staticfiles
       - /home/dimitar/splitit/app/dist:/application
+      - /home/dimitar/certbot/www/:/var/www/certbot/:ro
     depends_on:
       - django
     container_name: splitit-nginx
