@@ -25,13 +25,9 @@ SECRET_KEY = 'django-insecure-if2i9@fg7=!5-8$&(qv!i)0i&v985fdik&d(yyad7$a*osp^f+
 DEBUG = True
 
 ALLOWED_HOSTS = ["localhost", "dtasev.github.io", "django"]
-CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:5555", "http://localhost:5273", "https://dtasev.github.io", "http://django", "http://35.196.180.252"
-]
+CSRF_TRUSTED_ORIGINS = ["http://localhost:5555", "http://localhost:5273", "https://splitit.uk", "http://django"]
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5555", "http://localhost:5273", "https://dtasev.github.io", "http://django", "http://35.196.180.252"
-]
+CORS_ALLOWED_ORIGINS = ["http://localhost:5555", "http://localhost:5273", "https://splitit.uk", "http://django"]
 
 # Application definition
 
