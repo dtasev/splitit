@@ -43,10 +43,10 @@ export default memo(function Main() {
     return (
         <Container fluid={true}>
             <Row>
-                <Col className='col-lg-2 col-md-12 col-sm-12 col-xs-12'>
+                <Col className='col-lg-2 col-md-12 col-sm-12 col-12'>
                     <p>Side bar left</p>
                 </Col>
-                <Col className='col-lg-8 col-md-12 col-sm-12 col-xs-12'>
+                <Col className='col-lg-8 col-md-12 col-sm-12 col-12'>
                     <Row>
                         {editModal}
                         <ExpenseModal onSuccess={fetchDebts} />
@@ -55,7 +55,7 @@ export default memo(function Main() {
                         <DebtRowFactory debtsJson={debtsJson} onDelete={fetchDebts} editDebt={editDebt} />
                     </Row>
                 </Col>
-                <Col className='col-lg-2 col-md-12 col-sm-12 col-xs-12'>
+                <Col className='col-lg-2 col-md-12 col-sm-12 col-12'>
                     <SideBarRight debtsJson={debtsJson} />
                 </Col>
             </Row>
