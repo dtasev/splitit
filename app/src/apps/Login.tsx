@@ -66,7 +66,7 @@ export default memo(function Login(props: PropsWithChildren<LoginProps>) {
     );
 
     const logOutForm = <form>
-        <div className='d-flex flex-row-reverse'></div>
+        <div className='d-flex flex-row-reverse'>Hello {cookies.username}!</div>
         <button type='button' className='btn btn-primary' onClick={doLogout}>Logout</button>
     </form>
 

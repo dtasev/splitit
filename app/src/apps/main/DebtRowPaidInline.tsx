@@ -10,11 +10,11 @@ export default memo(function DebtRowPaidInline(props: PropsWithChildren<DebtRowP
     if (props.owner) {
         phraseL = "you paid";
         phraseR = `you lent ${props.debt.is_owed_username}`;
-        owed = props.debt.amount * (100 - props.debt.ratio) / 100;
+        owed = props.debt.amount * props.debt.ratio / 100;
     } else {
         phraseL = `${props.debt.owner_username} paid`;
         phraseR = `${props.debt.owner_username} lent you`;
-        owed = props.debt.amount * props.debt.ratio / 100;
+        owed = props.debt.amount * Math.abs(100 - props.debt.ratio) / 100;
     }
 
     return (<Row className='col-lg-6 col-12'>
