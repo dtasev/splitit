@@ -26,6 +26,10 @@ jobs:
       #     password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Build vite prod
+        run: bash build.sh
+      - name: SCP to remote
+        run: rsync -rvic app/dist/* dimitar@35.196.180.252:~/splitit/app/dist
       # - name: Build the backend
       #   run: cd backend && bash build.sh --push
       # - name: Build the nginx proxy
