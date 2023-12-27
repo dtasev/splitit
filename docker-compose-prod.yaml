@@ -30,6 +30,7 @@ services:
     volumes:
       - /home/dimitar/certbot/www/:/var/www/certbot/:rw
       - /home/dimitar/certbot/conf/:/etc/letsencrypt/:rw
+    command: certbot renew
 
   nginx:
     image: dtasev/splitit-nginx:latest
@@ -37,7 +38,7 @@ services:
     expose:
       - "5555"
     ports:
-      - 80:5555
+      - 443:5555
     volumes:
       - django_staticfiles:/data/django/staticfiles
       - /home/dimitar/splitit/app/dist:/application
