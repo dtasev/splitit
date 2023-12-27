@@ -37,7 +37,7 @@ jobs:
       - name: Build vite prod
         run: bash build.sh
       - name: SCP to remote
-        run: rsync -rvic app/dist/* m-prod:~/splitit/app/dist
+        run: scp -R app/dist/* m-prod:~/splitit/app/dist
       # - name: Build the backend
       #   run: cd backend && bash build.sh --push
       # - name: Build the nginx proxy
