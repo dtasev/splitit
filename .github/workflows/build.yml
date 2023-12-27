@@ -32,11 +32,12 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           name: id_rsa_gcloud # optional
           known_hosts: ${{ secrets.KNOWN_HOSTS }}
+          config: ${{ secrets.SSH_CONFIG }}
           if_key_exists: fail # replace / ignore / fail; optional (defaults to fail)
       - name: Build vite prod
         run: bash build.sh
       - name: SCP to remote
-        run: rsync -rvic app/dist/* dimitar@35.196.180.252:~/splitit/app/dist
+        run: rsync -rvic app/dist/* m-prod:~/splitit/app/dist
       # - name: Build the backend
       #   run: cd backend && bash build.sh --push
       # - name: Build the nginx proxy
@@ -44,10 +45,10 @@ jobs:
       # - name: Build the react container
       #   run: bash build.sh --push
       - name: Pull latest
-        run: ssh -i /home/runner/.ssh/id_rsa_gcloud dimitar@35.196.180.252 "cd splitit && git pull"
+        run: ssh m-prod "cd splitit && git pull"
       - name: Build backend
-        run: ssh -i /home/runner/.ssh/id_rsa_gcloud dimitar@35.196.180.252 "cd splitit/backend && bash build.sh"
+        run: ssh m-prod "cd splitit/backend && bash build.sh"
       - name: Build nginx
-        run: ssh -i /home/runner/.ssh/id_rsa_gcloud dimitar@35.196.180.252 "cd splitit/nginx && bash build.sh"
+        run: ssh m-prod "cd splitit/nginx && bash build.sh"
       - name: Compose -d
-        run: ssh -i /home/runner/.ssh/id_rsa_gcloud dimitar@35.196.180.252 "cd splitit && docker-compose -f docker-compose-prod.yaml up -d"
+        run: ssh m-prod "cd splitit && docker-compose -f docker-compose-prod.yaml up -d"
