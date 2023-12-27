@@ -42,8 +42,8 @@ jobs:
       - name: Pull latest
         run: ssh -i /home/runner/.ssh/id_rsa_gcloud dimitar@35.196.180.252 cd splitit && git pull
       - name: Build backend
-        run: ssh -i /home/runner/.ssh/id_rsa_gcloud dimitar@35.196.180.252 bash -c "cd splitit/backend && pwd && bash build.sh"
+        run: ssh -i /home/runner/.ssh/id_rsa_gcloud dimitar@35.196.180.252 cd splitit/backend && pwd # && bash build.sh
       - name: Build nginx
-        run: ssh -i /home/runner/.ssh/id_rsa_gcloud dimitar@35.196.180.252 bash -c "cd splitit/nginx && pwd && bash build.sh"
+        run: ssh -i /home/runner/.ssh/id_rsa_gcloud dimitar@35.196.180.252 cd splitit/nginx && pwd # && bash build.sh
       - name: Compose -d
         run: ssh -i /home/runner/.ssh/id_rsa_gcloud dimitar@35.196.180.252 cd splitit && docker-compose -f docker-compose-prod.yaml up -d
