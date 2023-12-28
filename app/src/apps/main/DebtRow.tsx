@@ -18,7 +18,7 @@ export default memo(function DebtRow(props: PropsWithChildren<DebtRowProps>) {
     const userCtx = useContext<UserContextI>(UserContext);
     const date = moment(props.debt.added).format('YYYY-MM-DD');
 
-    const deleteUrl = `${import.meta.env.VITE_API_URL}/api/debts/${props.debt.id}`
+    const deleteUrl = `${import.meta.env.VITE_API_URL}/api/debts/${props.debt.id}/`
     const deleteDebt = () => {
         if (window.confirm(`Delete the entry for ${props.debt.title} on ${date}?`)) {
             fetch(deleteUrl, {
