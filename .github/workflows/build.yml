@@ -62,5 +62,7 @@ jobs:
         run: ssh m-prod "cd splitit/backend && bash build.sh"
       - name: Build nginx
         run: ssh m-prod "cd splitit/nginx && bash build.sh"
+      - name: Set env vars for backend
+        run: ssh m-prod "cd splitit/backend && echo 'GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} > .env"
       - name: Compose -d
         run: ssh m-prod "cd splitit && docker-compose -f docker-compose-prod.yaml up -d"

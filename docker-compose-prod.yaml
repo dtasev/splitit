@@ -16,6 +16,9 @@ services:
   django:
     image: dtasev/splitit-backend:latest
     restart: always
+    environment:
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
     expose:
       - "8001"
     volumes:
