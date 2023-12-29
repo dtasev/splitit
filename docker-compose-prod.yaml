@@ -8,7 +8,7 @@ services:
      - "5432"
     environment:
       - PGDATA=/var/lib/postgresql/data/pgdata
-      - POSTGRES_PASSWORD=bzr6t2dd2g775c8oyibz
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
       - ~/splitit-pgdata:/var/lib/postgresql/data:rw
     container_name: splitit-psql
