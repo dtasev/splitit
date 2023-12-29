@@ -13,12 +13,13 @@ export default memo(function Main() {
     const [editModal, setEditModal] = useState<React.JSX.Element>();
 
     const fetchDebts = () => {
-        if (!userCtx.token) { return }
+        // if (!userCtx.token) { return }
         fetch(`${import.meta.env.VITE_API_URL}/api/debts/`,
             {
                 headers: {
                     "Authorization": `Token ${userCtx.token}`
-                }
+                },
+                credentials: "include"
             }
         ).then((res) => {
             if (res.status >= 400 && res.status < 500) { throw new Error }

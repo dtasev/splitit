@@ -1,3 +1,5 @@
+import { faGoogle } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PropsWithChildren, memo, useEffect, useRef, useState } from 'react';
 import { Container, Row } from 'react-bootstrap';
 import { useCookies } from 'react-cookie';
@@ -10,7 +12,7 @@ export default memo(function Login(props: PropsWithChildren<LoginProps>) {
     const usernameRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
 
-    const [cookies, setCookies] = useCookies(["apitoken", "username"]);
+    const [cookies, setCookies] = useCookies(["csrftoken", "apitoken", "username"]);
     const doLogin = () => {
         if (cookies.username && cookies.apitoken) {
             props.onSuccess({ username: cookies.username, token: cookies.apitoken });
@@ -23,6 +25,7 @@ export default memo(function Login(props: PropsWithChildren<LoginProps>) {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    "X-CsrfToken": cookies.csrftoken,
                 },
                 body: JSON.stringify({
                     "username": usernameRef?.current?.value,
@@ -50,21 +53,23 @@ export default memo(function Login(props: PropsWithChildren<LoginProps>) {
 
     useEffect(() => doLogin(), []);
 
+    // const loginForm = (
+    //     <form>
+    //         <div className="input-group">
+    //             <span className='input-group-text'>Username</span>
+    //             <input ref={usernameRef} type="text" name="username" id="username" className='input form-control' />
+    //         </div>
+
+    //         <div className="input-group">
+    //             <span className='input-group-text'>Password</span>
+    //             <input ref={passwordRef} type="text" name="password" id="password" className='input form-control' />
+    //             <button type='button' className='btn btn-primary' onClick={doLogin}>Login</button>
+    //         </div>
+    //     </form>
+    // );
     const loginForm = (
-        <form>
-            <div className="input-group">
-                <span className='input-group-text'>Username</span>
-                <input ref={usernameRef} type="text" name="username" id="username" className='input form-control' />
-            </div>
-
-            <div className="input-group">
-                <span className='input-group-text'>Password</span>
-                <input ref={passwordRef} type="text" name="password" id="password" className='input form-control' />
-                <button type='button' className='btn btn-primary' onClick={doLogin}>Login</button>
-            </div>
-        </form>
-    );
-
+        <a href="/api/login/google-oauth2/?next=/">Log in with Google <FontAwesomeIcon icon={faGoogle}></FontAwesomeIcon></a>
+    )
     const logOutForm = <form>
         <div className='d-flex flex-row-reverse'>Hello {cookies.username}!</div>
         <button type='button' className='btn btn-primary' onClick={doLogout}>Logout</button>

@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
-
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -27,7 +27,19 @@ DEBUG = True
 ALLOWED_HOSTS = ["localhost", "dtasev.github.io", "django"]
 CSRF_TRUSTED_ORIGINS = ["http://localhost:5555", "http://localhost:5273", "https://splitit.uk", "http://django"]
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:5555", "http://localhost:5273", "https://splitit.uk", "http://django"]
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:5555',
+    'http://localhost:5273',
+    'https://splitit.uk',
+    'http://django',
+]
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:5555',
+    'http://localhost:5273',
+    'https://splitit.uk',
+    'http://django',
+]
 
 # Application definition
 
@@ -39,7 +51,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "splitit.bill.apps.BillConfig",
+    'social_django',
+    'rest_framework',
+    'splitit.bill.apps.BillConfig',
 ]
 
 MIDDLEWARE = [
@@ -66,6 +80,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -124,13 +140,13 @@ STATIC_ROOT = '/data/django/staticfiles'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "HOST": "splitit-psql",
-        "PORT": "5432",
-        "NAME": "splitit",
-        "USER": "splitit",
-        "PASSWORD": "bzr6t2dd2g775c8oyibz",
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'HOST': 'postgresql',
+        'PORT': '5432',
+        'NAME': 'splitit',
+        'USER': 'splitit',
+        'PASSWORD': 'bzr6t2dd2g775c8oyibz',
     }
 }
 
@@ -138,9 +154,36 @@ CSRF_COOKIE_HTTPONLY = False
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
-        # 'rest_framework.authentication.SessionAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.IsAuthenticated'],
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.BrowsableAPIRenderer',
+        'rest_framework.renderers.JSONRenderer',
+    ]
 }
+
+USE_X_FORWARDED_HOST = True
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ.get('GOOGLE_CLIENT_ID', '')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.environ.get('GOOGLE_CLIENT_SECRET', '')
+SOCIAL_AUTH_AUTHENTICATION_BACKENDS = ('social_core.backends.google.GoogleOAuth2',)
+SOCIAL_AUTH_JSONFIELD_ENABLED = True
+
+SOCIAL_AUTH_RAISE_EXCEPTIONS = True
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
+    'https://www.googleapis.com/auth/userinfo.email',
+    'https://www.googleapis.com/auth/userinfo.profile',
+]
+
+AUTHENTICATION_BACKENDS = (
+    # Others auth providers (e.g. Facebook, OpenId, etc)
+    # Google  OAuth2
+    'social_core.backends.google.GoogleOAuth2',
+    # drf-social-oauth2
+    # 'drf_social_oauth2.backends.DjangoOAuth2',
+    # Django
+    'django.contrib.auth.backends.ModelBackend',
+)

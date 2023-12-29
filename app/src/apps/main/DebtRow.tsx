@@ -25,7 +25,9 @@ export default memo(function DebtRow(props: PropsWithChildren<DebtRowProps>) {
                 method: "DELETE",
                 headers: {
                     "Authorization": `Token ${userCtx.token}`
-                }
+                },
+                credentials: "include"
+
             }).then(() => {
                 props.onDelete();
             });

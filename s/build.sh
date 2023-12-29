@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -ex
-source ./base.sh
+source ./s/base.sh
 
 docker build -t ${image_name} -f Dockerfile .
 docker tag ${image_name} $image_repo:latest

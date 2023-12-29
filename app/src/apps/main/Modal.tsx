@@ -40,6 +40,8 @@ export default memo(function ExpenseModal(props: PropsWithChildren<ModalProps>) 
                 "X-CsrfToken": cookies.csrftoken,
                 "Authorization": `Token ${userCtx.token}`,
             },
+            credentials: "include",
+
             body: JSON.stringify({
                 is_owed: other.current?.value,
                 title: title.current?.value,

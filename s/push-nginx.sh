@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -ex
-source ./base.sh
+source ./s/base.sh
 
 docker push ${image_name}
 docker push ${image_repo}:latest
