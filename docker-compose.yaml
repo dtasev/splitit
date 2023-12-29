@@ -4,6 +4,8 @@ services:
   postgresql:
     image: postgres:16.1-bookworm
     restart: always
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
     expose:
      - "5432"
     environment:
@@ -15,6 +17,8 @@ services:
   django:
     image: dtasev/splitit-backend:latest
     restart: always
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
     environment:
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
       - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
@@ -29,10 +33,10 @@ services:
   react:
     image: dtasev/splitit:latest
     restart: always
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
     expose:
       - "5173"
-    ports:
-      - "5273:5173"
     volumes:
       - ./app:/app:rw
     depends_on:
@@ -41,6 +45,8 @@ services:
   nginx:
     image: dtasev/splitit-nginx:latest
     restart: always
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
     expose:
       - "5555"
     ports:
