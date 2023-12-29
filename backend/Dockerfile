@@ -1,12 +1,14 @@
 FROM python:3.11.6-slim-bookworm
 
-WORKDIR /app/splitit
-ENV PYTHONPATH=/app
-
+WORKDIR /app/
 COPY app/requirements.txt /app/requirements.txt
 RUN pip install -r /app/requirements.txt
 
 COPY app /app
+
+ENV PYTHONPATH=/app
+# ENV GOOGLE_CLIENT_ID=
+# ENV GOOGLE_CLIENT_SECRET=
 
 CMD python /app/manage.py collectstatic --noinput \
     && python /app/manage.py migrate --noinput \

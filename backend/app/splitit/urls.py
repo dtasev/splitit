@@ -20,7 +20,7 @@ from rest_framework.authtoken import views
 from rest_framework.routers import DefaultRouter
 
 from .bill.views import DebtView
-from .userdetail.views import UserViewSet
+from .userdetail.views import UserViewSet, logout_view
 
 router = DefaultRouter()
 router.register('debts', DebtView, basename="debts")
@@ -31,5 +31,6 @@ urlpatterns = [
     path("api/accounts/", include("django.contrib.auth.urls")),
     path('api/token-auth/', views.obtain_auth_token),
     path('api/', include(router.urls)),
-    path('api/', include('social_django.urls', namespace='social'))
+    path('api/', include('social_django.urls', namespace='social')),
+    path('api/logout/', logout_view)
 ]

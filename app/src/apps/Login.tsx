@@ -1,7 +1,7 @@
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PropsWithChildren, memo, useEffect, useRef, useState } from 'react';
-import { Container, Row } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import { useCookies } from 'react-cookie';
 
 interface LoginProps {
@@ -12,8 +12,8 @@ export default memo(function Login(props: PropsWithChildren<LoginProps>) {
     const usernameRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
 
-    const [cookies, setCookies] = useCookies(["csrftoken", "apitoken", "username"]);
-    const doLogin = () => {
+    const [cookies, setCookies, removeCookie] = useCookies(["csrftoken", "apitoken", "username"]);
+    const doBasicLogin = () => {
         if (cookies.username && cookies.apitoken) {
             props.onSuccess({ username: cookies.username, token: cookies.apitoken });
             setLoggedIn(true);
@@ -44,14 +44,43 @@ export default memo(function Login(props: PropsWithChildren<LoginProps>) {
             });
     };
 
+    const doGOAuth = () => {
+        if (!cookies.csrftoken) { return; }
+
+        fetch(`${import.meta.env.VITE_API_URL}/api/ud/me/`,
+            {
+                method: "GET",
+            }).then((resp) => {
+                if (resp.status >= 400) {
+                    throw new Error();
+                }
+                return resp.json();
+            }).then((json: UserDetailApiResponse) => {
+                setLoggedIn(true);
+                setCookies("username", json.username);
+                // sets the api token anyway for fun
+                setCookies("apitoken", json.token);
+                props.onSuccess({ username: usernameRef?.current?.value, token: json.token });
+            });
+    };
+
     const doLogout = () => {
         setLoggedIn(false);
-        setCookies("username", "");
-        setCookies("apitoken", "");
-        props.onSuccess({ username: "", token: "" });
+        removeCookie("username");
+        removeCookie("apitoken");
+        fetch(`${import.meta.env.VITE_API_URL}/api/logout/`,
+            {
+                method: "GET"
+            }).then((resp) => {
+                if (resp.status >= 400) {
+                    throw new Error();
+                }
+                props.onSuccess({ username: "", token: "" });
+            });
+
     }
 
-    useEffect(() => doLogin(), []);
+    useEffect(() => doGOAuth(), []);
 
     // const loginForm = (
     //     <form>
@@ -68,12 +97,12 @@ export default memo(function Login(props: PropsWithChildren<LoginProps>) {
     //     </form>
     // );
     const loginForm = (
-        <a href="/api/login/google-oauth2/?next=/">Log in with Google <FontAwesomeIcon icon={faGoogle}></FontAwesomeIcon></a>
+        <a className='btn btn-primary' href="/api/login/google-oauth2/?next=/">Log in with <FontAwesomeIcon icon={faGoogle} /></a>
     )
-    const logOutForm = <form>
-        <div className='d-flex flex-row-reverse'>Hello {cookies.username}!</div>
-        <button type='button' className='btn btn-primary' onClick={doLogout}>Logout</button>
-    </form>
+    const logOutForm = <div className='input-group'>
+        <div className='input-group-text'>Hello {cookies.username}!</div>
+        <button type='button' className='btn btn-outline-primary' onClick={doLogout}>Logout</button>
+    </div>
 
-    return <Container><Row>{loggedIn ? logOutForm : loginForm}</Row></Container>;
+    return <Container fluid={true}>{loggedIn ? logOutForm : loginForm}</Container>;
 })

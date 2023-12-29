@@ -3,7 +3,6 @@ import Main from './apps/main/Main'
 
 import './App.css'
 import { createContext, useState } from 'react';
-import Login from './apps/Login';
 import { Container } from 'react-bootstrap';
 
 
@@ -16,13 +15,12 @@ function App() {
   const onSuccessLogin = (json: UserContextI) => {
     setUserDeets(json);
   }
-  const loginElem = <Login onSuccess={onSuccessLogin} />;
 
   return (
     <>
       <UserContext.Provider value={userDeets}>
         <Container fluid={true}>
-          <Header loginElem={loginElem} />
+          <Header onSuccessLogin={onSuccessLogin} />
           <Main />
         </Container>
       </UserContext.Provider>

@@ -12,3 +12,10 @@ interface DebtApiResponse {
     owner_username: string
     is_owed_username: string
 }
+
+interface UserDetailApiResponse {
+    email: string
+    id: number
+    token: string
+    username: string
+}

@@ -67,12 +67,14 @@ export default memo(function ExpenseModal(props: PropsWithChildren<ModalProps>) 
         }
     }
 
-    const button = props.debt ? null : <Button variant="primary" onClick={handleShow}>Add expense</Button>;
+    // okay i'll need multiple modals so this button can't be that specific, should take some props name, action etc
+    const addExpense = props.debt ? null : <Button variant="primary" onClick={handleShow}>Add expense</Button>;
+    // const addExpense = props.debt ? null : <Button variant="dager-outline" onClick={handleSettle}>Add expense</Button>;
     const defaultDate = new Date().toLocaleDateString("en-CA");
 
     return (
         <>
-            {button}
+            {addExpense}
             <Modal show={show} onHide={handleClose} centered>
                 <Modal.Header closeButton>
                     <Modal.Title>Modal heading</Modal.Title>

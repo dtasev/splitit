@@ -58,6 +58,8 @@ jobs:
       #   run: bash build.sh --push
       - name: Pull latest
         run: ssh m-prod "cd splitit && git pull"
+      - name: Decrypt .env for docker compose
+        run: ssh m-prod "bash s/manage-env.sh '${{ secrets.ENV_DECRYPT_KEY }}'"
       - name: Build backend
         run: ssh m-prod "cd splitit/backend && bash build.sh"
       - name: Build nginx

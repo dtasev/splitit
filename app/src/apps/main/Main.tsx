@@ -6,14 +6,13 @@ import { UserContext } from '../../App';
 import SideBarRight from './SideBarRight';
 
 
-
 export default memo(function Main() {
     const [debtsJson, setDebtsJson] = useState<DebtApiResponse[]>([]);
     const userCtx = useContext<UserContextI>(UserContext);
     const [editModal, setEditModal] = useState<React.JSX.Element>();
 
     const fetchDebts = () => {
-        // if (!userCtx.token) { return }
+        if (!userCtx.token) { return }
         fetch(`${import.meta.env.VITE_API_URL}/api/debts/`,
             {
                 headers: {
