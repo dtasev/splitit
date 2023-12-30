@@ -1,13 +1,16 @@
 import { PropsWithChildren, memo, useContext, useRef, useState } from 'react';
 import { useCookies } from 'react-cookie';
-import { UserContext } from '../../App';
+import { UserContext } from '../../../App';
 import { Button } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
 
 interface ModalProps {
     onSuccess: () => void;
     onClose?: () => void;
+
     debt?: DebtApiResponse;
+
+    className?: string;
 }
 
 export default memo(function ExpenseModal(props: PropsWithChildren<ModalProps>) {
@@ -68,16 +71,16 @@ export default memo(function ExpenseModal(props: PropsWithChildren<ModalProps>) 
     }
 
     // okay i'll need multiple modals so this button can't be that specific, should take some props name, action etc
-    const addExpense = props.debt ? null : <Button variant="primary" onClick={handleShow}>Add expense</Button>;
+    const addExpense = props.debt ? null : <Button variant="outline-warning" onClick={handleShow}>Add expense</Button>;
     // const addExpense = props.debt ? null : <Button variant="dager-outline" onClick={handleSettle}>Add expense</Button>;
     const defaultDate = new Date().toLocaleDateString("en-CA");
 
     return (
-        <>
+        <div className={props.className}>
             {addExpense}
             <Modal show={show} onHide={handleClose} centered>
                 <Modal.Header closeButton>
-                    <Modal.Title>Modal heading</Modal.Title>
+                    <Modal.Title>Add expense</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <div className='input-group'>
@@ -115,6 +118,6 @@ export default memo(function ExpenseModal(props: PropsWithChildren<ModalProps>) 
                     </Button>
                 </Modal.Footer>
             </Modal>
-        </>
+        </div>
     );
 })

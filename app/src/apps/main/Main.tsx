@@ -1,9 +1,10 @@
 import React, { memo, useContext, useEffect, useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import DebtRowFactory from './DebtRowFactory';
-import ExpenseModal from './Modal';
+import ExpenseModal from './modals/AddExpenseModal';
 import { UserContext } from '../../App';
 import SideBarRight from './SideBarRight';
+import SettleUpModal from './modals/SettleUpModal';
 
 
 export default memo(function Main() {
@@ -48,9 +49,13 @@ export default memo(function Main() {
                     <p>Side bar left</p>
                 </Col>
                 <Col className='col-lg-8 col-md-12 col-sm-12 col-12'>
+                    {editModal}
                     <Row>
-                        {editModal}
-                        <ExpenseModal onSuccess={fetchDebts} />
+                        <div className='d-flex flex-row mb-3'>
+                            <div className='flex-fill'></div>
+                            <ExpenseModal className="mx-2" onSuccess={fetchDebts} />
+                            <SettleUpModal className="" onSuccess={fetchDebts} />
+                        </div>
                     </Row>
                     <Row className='border'>
                         <DebtRowFactory debtsJson={debtsJson} onDelete={fetchDebts} editDebt={editDebt} />
