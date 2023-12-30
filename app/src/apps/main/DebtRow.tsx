@@ -43,8 +43,8 @@ export default memo(function DebtRow(props: PropsWithChildren<DebtRowProps>) {
                 <DebtRowPaidInline owner={userCtx.username === props.debt.owner_username} debt={props.debt} />
                 <Col className='my-auto col-lg-2 col-12'>
                     <Row>
-                        <Col className='px-lg-2 col-6'><a className="icon-link" href="" onClick={() => props.editDebt(props.debt)}><FontAwesomeIcon icon={faPencil}></FontAwesomeIcon></a></Col>
-                        <Col className='px-lg-2 col-6'><a className="icon-link" href="" onClick={deleteDebt}><FontAwesomeIcon icon={faXmark}></FontAwesomeIcon></a></Col>
+                        <Col className='px-lg-2 col-6'><a className="icon-link" href="#" onClick={() => props.editDebt(props.debt)}><FontAwesomeIcon icon={faPencil}></FontAwesomeIcon></a></Col>
+                        <Col className='px-lg-2 col-6'><a className="icon-link" href="#" onClick={deleteDebt}><FontAwesomeIcon icon={faXmark}></FontAwesomeIcon></a></Col>
                     </Row>
                 </Col>
             </Row>

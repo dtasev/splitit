@@ -60,7 +60,7 @@ export default memo(function Login(props: PropsWithChildren<LoginProps>) {
                 setCookies("username", json.username);
                 // sets the api token anyway for fun
                 setCookies("apitoken", json.token);
-                props.onSuccess({ username: usernameRef?.current?.value, token: json.token });
+                props.onSuccess({ username: json.username, token: json.token });
             });
     };
 
