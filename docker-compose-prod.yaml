@@ -17,6 +17,7 @@ services:
     image: dtasev/splitit-backend:latest
     restart: always
     environment:
+      - PRODUCTION=True
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
       - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
     expose:

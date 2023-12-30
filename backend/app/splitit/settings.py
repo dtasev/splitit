@@ -22,7 +22,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-if2i9@fg7=!5-8$&(qv!i)0i&v985fdik&d(yyad7$a*osp^f+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = not bool(os.environ.get("PRODUCTION", False))
+
+if not DEBUG:
+    SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 
 ALLOWED_HOSTS = ["localhost", "dtasev.github.io", "django", "splitit.uk"]
 CSRF_TRUSTED_ORIGINS = ["http://localhost:5555", "http://localhost:5273", "https://splitit.uk", "http://django"]
