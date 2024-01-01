@@ -5,14 +5,18 @@ interface DebtRowPaidInlineIP {
     owner: boolean
     debt: DebtApiResponse
 }
+
 export default memo(function DebtRowPaidInline(props: PropsWithChildren<DebtRowPaidInlineIP>) {
-    let phraseL: string, phraseR: string;
+    let phraseL: string, phraseR: string, className: string;
+
     if (props.owner) {
         phraseL = "you paid";
         phraseR = `you lent ${props.debt.is_owed_username}`;
+        className = "text-center fw-bold text-success";
     } else {
         phraseL = `${props.debt.owner_username} paid`;
         phraseR = `${props.debt.owner_username} lent you`;
+        className = "text-center fw-bold text-danger";
     }
 
     let ratio: number;
@@ -29,12 +33,12 @@ export default memo(function DebtRowPaidInline(props: PropsWithChildren<DebtRowP
 
     return (<Row className='col-lg-6 col-12'>
         <Col className='col-6'>
-            <div className='text-center font-little'>{phraseL} {ratio*100}% of</div>
+            <div className='text-center font-little'>{phraseL} {ratio * 100}% of</div>
             <div className='text-center fw-bold'>£{props.debt.amount}</div>
         </Col>
         <Col className='col-6'>
             <div className='text-center font-little'>{phraseR}</div>
-            <div className='text-center fw-bold'>£{owed}</div>
+            <div className={className}>£{owed}</div>
         </Col>
     </Row>);
 })

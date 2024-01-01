@@ -9,40 +9,39 @@ interface LoginProps {
 }
 export default memo(function Login(props: PropsWithChildren<LoginProps>) {
     const [loggedIn, setLoggedIn] = useState<boolean>(false);
-    const usernameRef = useRef<HTMLInputElement>(null);
-    const passwordRef = useRef<HTMLInputElement>(null);
 
     const [cookies, setCookies, removeCookie] = useCookies(["csrftoken", "apitoken", "username"]);
-    const doBasicLogin = () => {
-        if (cookies.username && cookies.apitoken) {
-            props.onSuccess({ username: cookies.username, token: cookies.apitoken });
-            setLoggedIn(true);
-            return;
-        }
 
-        fetch(`${import.meta.env.VITE_API_URL}/api/token-auth/`,
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CsrfToken": cookies.csrftoken,
-                },
-                body: JSON.stringify({
-                    "username": usernameRef?.current?.value,
-                    "password": passwordRef?.current?.value
-                }),
-            }).then((resp) => {
-                if (resp.status >= 400) {
-                    throw new Error();
-                }
-                return resp.json();
-            }).then((json) => {
-                setLoggedIn(true);
-                setCookies("username", usernameRef?.current?.value);
-                setCookies("apitoken", json.token);
-                props.onSuccess({ username: usernameRef?.current?.value, token: json.token });
-            });
-    };
+    // const doBasicLogin = () => {
+    //     if (cookies.username && cookies.apitoken) {
+    //         props.onSuccess({ username: cookies.username, token: cookies.apitoken });
+    //         setLoggedIn(true);
+    //         return;
+    //     }
+
+    //     fetch(`${import.meta.env.VITE_API_URL}/api/token-auth/`,
+    //         {
+    //             method: "POST",
+    //             headers: {
+    //                 "Content-Type": "application/json",
+    //                 "X-CsrfToken": cookies.csrftoken,
+    //             },
+    //             body: JSON.stringify({
+    //                 "username": usernameRef?.current?.value,
+    //                 "password": passwordRef?.current?.value
+    //             }),
+    //         }).then((resp) => {
+    //             if (resp.status >= 400) {
+    //                 throw new Error();
+    //             }
+    //             return resp.json();
+    //         }).then((json) => {
+    //             setLoggedIn(true);
+    //             setCookies("username", usernameRef?.current?.value);
+    //             setCookies("apitoken", json.token);
+    //             props.onSuccess({ username: usernameRef?.current?.value, token: json.token });
+    //         });
+    // };
 
     const doGOAuth = () => {
         if (!cookies.csrftoken) { return; }
