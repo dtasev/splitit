@@ -1,4 +1,4 @@
-import { PropsWithChildren, memo, useContext } from 'react';
+import { PropsWithChildren, memo } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import moment from 'moment';
 
@@ -16,7 +16,7 @@ interface DebtRowProps {
 }
 export default memo(function DebtRow(props: PropsWithChildren<DebtRowProps>) {
     const date = moment(props.debt.added).format('YYYY-MM-DD');
-    const [cookies] = useCookies(["csrftoken", "apitoken"]);
+    const [cookies] = useCookies(["csrftoken", "apitoken", "username"]);
 
     const deleteUrl = `${import.meta.env.VITE_API_URL}/api/debts/${props.debt.id}/`
     const deleteDebt = () => {
@@ -42,7 +42,7 @@ export default memo(function DebtRow(props: PropsWithChildren<DebtRowProps>) {
                 <Col className='my-auto mx-auto col-lg-2 col-5'>{date}</Col>
                 <Col className='my-auto text-lg-start col-lg-2 col-7'>{props.debt.title}</Col>
                 {/* <Col>amount: {props.debt.amount} ratio: {props.debt.ratio}</Col> */}
-                <DebtRowPaidInline owner={userCtx.username === props.debt.owner_username} debt={props.debt} />
+                <DebtRowPaidInline owner={cookies.username === props.debt.owner_username} debt={props.debt} />
                 <Col className='my-auto col-lg-2 col-12'>
                     <Row>
                         <Col className='px-lg-2 col-6'><a className="icon-link" href="#" onClick={() => props.editDebt(props.debt)}><FontAwesomeIcon icon={faPencil}></FontAwesomeIcon></a></Col>
