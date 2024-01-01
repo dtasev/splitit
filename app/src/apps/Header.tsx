@@ -9,7 +9,9 @@ export default memo(function Header(props: PropsWithChildren<HeaderProps>) {
     return (
         <header className="mb-5">
             <nav className="navbar navbar-expand-md bg-body-tertiary">
-                <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                <div className="" id="navbarSupportedContent">
+                    {/* todo fix collapse */}
+                    {/* <div className="collapse navbar-collapse" id="navbarSupportedContent"> */}
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                         <li className="nav-item">
                             <a className="nav-link active" aria-current="page" href="#">Home</a>
