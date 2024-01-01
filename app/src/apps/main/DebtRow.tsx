@@ -1,7 +1,6 @@
 import { PropsWithChildren, memo, useContext } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import moment from 'moment';
-import { UserContext } from '../../App';
 
 import './Main.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
