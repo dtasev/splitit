@@ -9,9 +9,12 @@ User = get_user_model()
 
 
 class Debt(models.Model):
-    owner = models.ForeignKey(User, related_name="owes", on_delete=models.CASCADE)
-    is_owed = models.ForeignKey(User, related_name="is_owed", on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, related_name="owner", on_delete=models.CASCADE)
+    is_owed = models.ForeignKey(User, related_name="owes", on_delete=models.CASCADE)
+    # total amount of the payment
     amount = models.FloatField(validators=[MinValueValidator(0.0)])
+    # lent to the other person - how much they owe you
+    lent = models.FloatField(validators=[MinValueValidator(0.0)], null=True)
     ratio = models.PositiveIntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)])
     settled = models.BooleanField(default=False)
     added = models.DateTimeField(default=timezone.now)

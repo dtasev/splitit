@@ -1,6 +1,7 @@
-interface DebtApiResponse {
+interface DebtDetailApiResponse {
     id: number
     amount: number
+    lent: number
     ratio: number
     settled: boolean
     added: string

@@ -4,15 +4,16 @@ import { UserContext } from '../../../App';
 import { Button } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
 
-interface ModalProps {
+interface SettleModalProps {
     onSuccess: () => void;
     onClose?: () => void;
 
-    debt?: DebtApiResponse;
+    debt?: DebtDetailApiResponse;
+    otherUser?: string;
     className?: string;
 }
 
-export default memo(function SettleUpModal(props: PropsWithChildren<ModalProps>) {
+export default memo(function SettleUpModal(props: PropsWithChildren<SettleModalProps>) {
     const other = useRef<HTMLInputElement>(null);
     const title = useRef<HTMLInputElement>(null);
     const amount = useRef<HTMLInputElement>(null);
@@ -70,7 +71,7 @@ export default memo(function SettleUpModal(props: PropsWithChildren<ModalProps>)
     }
 
     // okay i'll need multiple modals so this button can't be that specific, should take some props name, action etc
-    const addExpense = props.debt ? null : <Button variant="outline-success" disabled={true} onClick={handleShow}>Settle Up</Button>;
+    const addExpense = props.debt ? null : <Button variant="success" onClick={handleShow} disabled={true}>Settle Up</Button>;
     // const addExpense = props.debt ? null : <Button variant="dager-outline" onClick={handleSettle}>Add expense</Button>;
     const defaultDate = new Date().toLocaleDateString("en-CA");
 

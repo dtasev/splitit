@@ -3,7 +3,7 @@ import { Col, Row } from 'react-bootstrap';
 
 interface DebtRowPaidInlineIP {
     owner: boolean
-    debt: DebtApiResponse
+    debt: DebtDetailApiResponse
 }
 
 export default memo(function DebtRowPaidInline(props: PropsWithChildren<DebtRowPaidInlineIP>) {
@@ -31,14 +31,16 @@ export default memo(function DebtRowPaidInline(props: PropsWithChildren<DebtRowP
 
     const owed = props.debt.amount * ratio;
 
-    return (<Row className='col-lg-6 col-12'>
-        <Col className='col-6'>
-            <div className='text-center font-little'>{phraseL} {ratio * 100}% of</div>
-            <div className='text-center fw-bold'>£{props.debt.amount}</div>
-        </Col>
-        <Col className='col-6'>
-            <div className='text-center font-little'>{phraseR}</div>
-            <div className={className}>£{owed}</div>
-        </Col>
-    </Row>);
+    return (
+        <Row className='col-lg-6 col-12'>
+            <Col className='col-6'>
+                <div className='text-center font-little'>{phraseL} {ratio * 100}% of</div>
+                <div className='text-center fw-bold'>£{props.debt.amount}</div>
+            </Col>
+            <Col className='col-6'>
+                <div className='text-center font-little'>{phraseR}</div>
+                <div className={className}>£{owed}</div>
+            </Col>
+        </Row>
+    );
 })

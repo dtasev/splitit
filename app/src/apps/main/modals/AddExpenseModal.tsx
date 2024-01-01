@@ -3,26 +3,31 @@ import { useCookies } from 'react-cookie';
 import { UserContext } from '../../../App';
 import { Button } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCalendar } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons/faCalendarAlt';
 
-interface ModalProps {
+interface AddExpenseModalProps {
     onSuccess: () => void;
     onClose?: () => void;
 
-    debt?: DebtApiResponse;
-
+    debt?: DebtDetailApiResponse;
+    otherUser?: string;
     className?: string;
 }
 
-export default memo(function ExpenseModal(props: PropsWithChildren<ModalProps>) {
-    const other = useRef<HTMLInputElement>(null);
-    const title = useRef<HTMLInputElement>(null);
-    const amount = useRef<HTMLInputElement>(null);
-    const ratio = useRef<HTMLInputElement>(null);
-    const added = useRef<HTMLInputElement>(null);
+export default memo(function ExpenseModal(props: PropsWithChildren<AddExpenseModalProps>) {
+    const otherE = useRef<HTMLInputElement>(null);
+    const titleE = useRef<HTMLInputElement>(null);
+    const amountE = useRef<HTMLInputElement>(null);
+    const lentE = useRef<HTMLInputElement>(null);
+    const ratioE = useRef<HTMLInputElement>(null);
+    const addedE = useRef<HTMLInputElement>(null);
 
-    const [ratioNote, setRatioNote] = useState<string>("");
+    const [lentValue, setLentField] = useState<number>(props.debt?.lent || 10000);
+    const [ratioPerc, setRatioPerc] = useState<string>("50");
 
-    const [cookies, _] = useCookies(["csrftoken"]);
+    const [cookies, _] = useCookies(["csrftoken", "username"]);
     const userCtx = useContext(UserContext);
 
     const [show, setShow] = useState<boolean>(props.debt ? true : false);
@@ -46,11 +51,12 @@ export default memo(function ExpenseModal(props: PropsWithChildren<ModalProps>) 
             credentials: "include",
 
             body: JSON.stringify({
-                is_owed: other.current?.value,
-                title: title.current?.value,
-                amount: amount.current?.value,
-                ratio: ratio.current?.value,
-                added: added.current?.value,
+                is_owed: otherE.current?.value,
+                title: titleE.current?.value,
+                amount: amountE.current?.value,
+                lent: lentE.current?.value,
+                ratio: ratioE.current?.value,
+                added: addedE.current?.value,
             })
         }).then((res) => {
             if (res.status >= 400) {
@@ -63,15 +69,17 @@ export default memo(function ExpenseModal(props: PropsWithChildren<ModalProps>) 
     }
 
     const updateRatioNote = () => {
-        if (other.current?.value && amount.current?.value) {
-            const owedByYou = parseInt(amount.current?.value) * parseInt(ratio.current?.value || "50") / 100;
-            const owedByThem = Math.abs(owedByYou - parseInt(amount.current?.value));
-            setRatioNote(`You pay £${owedByYou} and they pay £${owedByThem.toFixed(2)}`);
+        if (amountE.current?.value) {
+            setRatioPerc(ratioE.current?.value || "50");
+            const ratio = parseInt(ratioE.current?.value || "50") / 100;
+            const owedByYou = parseInt(amountE.current?.value) * ratio;
+            const owedByThem = Math.abs(owedByYou - parseInt(amountE.current?.value));
+            setLentField(owedByThem);
         }
     }
 
     // okay i'll need multiple modals so this button can't be that specific, should take some props name, action etc
-    const addExpense = props.debt ? null : <Button variant="outline-warning" onClick={handleShow}>Add expense</Button>;
+    const addExpense = props.debt ? null : <Button variant="warning" onClick={handleShow}>Add expense</Button>;
     // const addExpense = props.debt ? null : <Button variant="dager-outline" onClick={handleSettle}>Add expense</Button>;
     const defaultDate = new Date().toLocaleDateString("en-CA");
 
@@ -83,30 +91,30 @@ export default memo(function ExpenseModal(props: PropsWithChildren<ModalProps>) 
                     <Modal.Title>Add expense</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <div className='input-group'>
-                        <label className='form-label' htmlFor="is_owed">With you and: </label>
-                        <input ref={other} className='form-control' id='is_owed' name='is_owed' type="text" required defaultValue={props.debt?.is_owed_username || ""} />
+                    <div className='input-group mb-3'>
+                        <label className='input-group-text' htmlFor="is_owed">With you and: </label>
+                        <input ref={otherE} className='form-control' id='is_owed' name='is_owed' type="text" required defaultValue={props.otherUser || ""} />
                     </div>
-                    <div className='input-group'>
+                    <div className='input-group mb-2'>
                         <span className="input-group-text">Description</span>
-                        <input ref={title} className='form-control' id='title' name='title' type="text" placeholder='Description' required defaultValue={props.debt?.title || ""} />
+                        <input ref={titleE} className='form-control' id='title' name='title' type="text" placeholder='Description' required defaultValue={props.debt?.title || ""} />
                     </div>
-                    <div className='input-group'>
+                    <div className='input-group mb-2'>
                         <span className="input-group-text">£</span>
-                        <input ref={amount} className='form-control' id='amount' name='amount' type="number" min={0} onChange={updateRatioNote} defaultValue={props.debt?.amount || ""} />
+                        <input ref={amountE} className='form-control' id='amount' name='amount' type="number" min={0} onChange={updateRatioNote} defaultValue={props.debt?.amount || ""} />
                     </div>
-                    <div className='border rounded'>
-                        <label htmlFor="ratio" className="form-label input-group-text">Ratio</label>
-                        <input ref={ratio} className='form-range' id='ratio' name='ratio' type="range" min={0} max={100} step={5} defaultValue={props.debt?.ratio || 50} onChange={updateRatioNote} />
+                    <div className='input-group mb-2 d-flex flex-row'>
+                        <label htmlFor="ratio" className="input-group-text">Ratio</label>
+                        <span className='input-group-text'>{ratioPerc}%</span>
+                        <div className='mx-2 my-auto mt-2 flex-fill'>
+                            <input ref={ratioE} className='form-range' id='ratio' name='ratio' type="range" min={0} max={100} step={5} defaultValue={props.debt?.ratio || 50} onChange={updateRatioNote} />
+                        </div>
                     </div>
-
-                    <div className='text-center'>
-                        <span>{ratioNote}</span>
-                    </div>
-
-                    <div className='input-group'>
-                        <span className="input-group-text">Date</span>
-                        <input ref={added} className='form-control' type='date' name="added" id="added" defaultValue={defaultDate}></input>
+                    <div className='input-group mb-2'>
+                        <span className="input-group-text">They pay £</span>
+                        <input ref={lentE} className='form-control' id='lent' name='lent' type="number" value={lentValue.toFixed(2)} readOnly />
+                        <span className="input-group-text"><FontAwesomeIcon icon={faCalendarAlt} /></span>
+                        <input ref={addedE} className='form-control' type='date' name="added" id="added" defaultValue={defaultDate}></input>
                     </div>
                 </Modal.Body>
                 <Modal.Footer>

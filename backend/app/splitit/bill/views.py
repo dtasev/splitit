@@ -5,7 +5,7 @@ from splitit.bill.models import Debt
 from rest_framework import status
 from rest_framework.response import Response
 from django.db.models import Q
-
+from functools import reduce
 import logging
 
 logging.basicConfig(level=os.environ.get("LOG_LEVEL", logging.INFO),
@@ -26,13 +26,43 @@ class DebtSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class DebtListSerializer(serializers.ModelSerializer):
+
+    owner_username = serializers.CharField(source="owner.username", read_only=True)
+    is_owed_username = serializers.CharField(source="is_owed.username", read_only=True)
+    total_owed = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Debt
+        fields = ["owner", "is_owed", "owner_username", "is_owed_username", "total_owed"]
+
+    def get_total_owed(self, obj):
+
+        # qs should be coming from .distinct
+        assert self.instance.count() == 1
+        owner = self.instance[0].owner
+
+        # unforunately to calculate we still need to pull in all the related debts
+        query = Q(owner=owner) | Q(is_owed=owner)
+        qs = Debt.objects.filter(query, settled=False)
+
+        def reductor(acc: int, b: Debt):
+            logger.info("%s vs %s", b.owner, owner)
+            if b.owner == owner:
+                return acc + b.lent
+            else:
+                return acc - b.lent
+
+        return reduce(reductor, qs, 0)
+
+
 class DebtView(viewsets.ModelViewSet):
 
     serializer_class = DebtSerializer
 
     def get_queryset(self):
         query = Q(owner=self.request.user) | Q(is_owed=self.request.user)
-        return Debt.objects.filter(query).order_by("-added", "-pk")
+        return Debt.objects.filter(query, settled=False).order_by("-added", "-pk")
 
     def create(self, request, *args, **kwargs):
         data = request.data
@@ -63,4 +93,19 @@ class DebtView(viewsets.ModelViewSet):
             # forcibly invalidate the prefetch cache on the instance.
             instance._prefetched_objects_cache = {}
 
-        return Response(serializer.data)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_202_ACCEPTED, headers=headers)
+
+    def list(self, request):
+        qs = request.user.owes.all().distinct('is_owed')
+        serializer = DebtListSerializer(qs, many=True)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)
+
+    def retrieve(self, request, pk=None):
+        qs = self.get_queryset()
+        query = Q(owner=pk) | Q(is_owed=pk)
+        qs = qs.filter(query)
+        serializer = DebtSerializer(qs, many=True)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)

@@ -1,17 +1,16 @@
 import { PropsWithChildren, memo } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import moment from 'moment';
-
-import './Main.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencil, faXmark } from '@fortawesome/free-solid-svg-icons';
 import DebtRowPaidInline from './DebtRowPaidInline';
 import { useCookies } from 'react-cookie';
 
+import './DebtList.css';
 
 interface DebtRowProps {
-    debt: DebtApiResponse;
-    editDebt: (debt: DebtApiResponse) => void;
+    debt: DebtDetailApiResponse;
+    editDebt: (debt: DebtDetailApiResponse) => void;
     onDelete: () => void;
 }
 export default memo(function DebtRow(props: PropsWithChildren<DebtRowProps>) {
@@ -41,7 +40,6 @@ export default memo(function DebtRow(props: PropsWithChildren<DebtRowProps>) {
             <Row>
                 <Col className='my-auto mx-auto col-lg-2 col-5'>{date}</Col>
                 <Col className='my-auto text-lg-start col-lg-2 col-7'>{props.debt.title}</Col>
-                {/* <Col>amount: {props.debt.amount} ratio: {props.debt.ratio}</Col> */}
                 <DebtRowPaidInline owner={cookies.username === props.debt.owner_username} debt={props.debt} />
                 <Col className='my-auto col-lg-2 col-12'>
                     <Row>

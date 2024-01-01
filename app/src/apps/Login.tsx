@@ -1,6 +1,6 @@
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { PropsWithChildren, memo, useEffect, useRef, useState } from 'react';
+import { PropsWithChildren, memo, useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
 import { useCookies } from 'react-cookie';
 

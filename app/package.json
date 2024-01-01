@@ -20,7 +20,8 @@
     "react-bootstrap": "^2.9.1",
     "react-cookie": "^6.1.1",
     "react-dom": "^18.2.0",
-    "react-moment": "^1.1.3"
+    "react-moment": "^1.1.3",
+    "react-router-dom": "^6.21.1"
   },
   "devDependencies": {
     "@popperjs/core": "^2.11.8",
