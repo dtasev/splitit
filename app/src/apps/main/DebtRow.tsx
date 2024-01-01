@@ -7,6 +7,7 @@ import './Main.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencil, faXmark } from '@fortawesome/free-solid-svg-icons';
 import DebtRowPaidInline from './DebtRowPaidInline';
+import { useCookies } from 'react-cookie';
 
 
 interface DebtRowProps {
@@ -15,8 +16,8 @@ interface DebtRowProps {
     onDelete: () => void;
 }
 export default memo(function DebtRow(props: PropsWithChildren<DebtRowProps>) {
-    const userCtx = useContext<UserContextI>(UserContext);
     const date = moment(props.debt.added).format('YYYY-MM-DD');
+    const [cookies] = useCookies(["csrftoken", "apitoken"]);
 
     const deleteUrl = `${import.meta.env.VITE_API_URL}/api/debts/${props.debt.id}/`
     const deleteDebt = () => {
@@ -24,7 +25,9 @@ export default memo(function DebtRow(props: PropsWithChildren<DebtRowProps>) {
             fetch(deleteUrl, {
                 method: "DELETE",
                 headers: {
-                    "Authorization": `Token ${userCtx.token}`
+                    "Content-Type": "application/json",
+                    "Authorization": `Token ${cookies.apitoken}`,
+                    "X-CsrfToken": cookies.csrftoken,
                 },
                 credentials: "include"
 
