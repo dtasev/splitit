@@ -103,5 +103,5 @@ export default memo(function Login(props: PropsWithChildren<LoginProps>) {
         <button type='button' className='btn btn-outline-primary' onClick={doLogout}>Logout</button>
     </div>
 
-    return <Container fluid={true}>{loggedIn ? logOutForm : loginForm}</Container>;
+    return <>{loggedIn ? logOutForm : loginForm}</>;
 })

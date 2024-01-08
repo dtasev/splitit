@@ -1,8 +1,6 @@
 import { memo, useContext, useEffect, useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
-import ExpenseModal from '../main/modals/AddExpenseModal';
 import { UserContext } from '../../App';
-import SettleUpModal from '../main/modals/SettleUpModal';
 import UserDebtRowFactory from './UserDebtRowFactory';
 
 

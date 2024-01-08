@@ -36,18 +36,20 @@ export default memo(function DebtRow(props: PropsWithChildren<DebtRowProps>) {
     }
 
     return (
-        <Container className='border border-collapse'>
-            <Row>
-                <Col className='my-auto mx-auto col-lg-2 col-5'>{date}</Col>
-                <Col className='my-auto text-lg-start col-lg-2 col-7'>{props.debt.title}</Col>
-                <DebtRowPaidInline owner={cookies.username === props.debt.owner_username} debt={props.debt} />
-                <Col className='my-auto col-lg-2 col-12'>
-                    <Row>
-                        <Col className='px-lg-2 col-6'><a className="icon-link" href="#" onClick={() => props.editDebt(props.debt)}><FontAwesomeIcon icon={faPencil}></FontAwesomeIcon></a></Col>
-                        <Col className='px-lg-2 col-6'><a className="icon-link" href="#" onClick={deleteDebt}><FontAwesomeIcon icon={faXmark}></FontAwesomeIcon></a></Col>
-                    </Row>
-                </Col>
-            </Row>
-        </Container>
+        <Container className='border border-collapse justify-content-center'>
+            <Row className='my-auto'>
+                <div className='col-lg-2 col-6'>{date}</div>
+                <div className='text-lg-start col-lg-2 col-6'>{props.debt.title}</div>
+                <div className='col-lg-6 col-12'>
+                    <DebtRowPaidInline owner={cookies.username === props.debt.owner_username} debt={props.debt} />
+                </div>
+                <div className='col-lg-2 col-12 my-auto'>
+                    <div className='d-flex border rounded'>
+                        <div className='flex-fill border' role='button' onClick={() => props.editDebt(props.debt)}><FontAwesomeIcon icon={faPencil}></FontAwesomeIcon></div>
+                        <div className='flex-fill border' role='button' onClick={deleteDebt}><FontAwesomeIcon icon={faXmark}></FontAwesomeIcon></div>
+                    </div>
+                </div >
+            </Row >
+        </Container >
     );
 })

@@ -31,16 +31,15 @@ export default memo(function DebtRowPaidInline(props: PropsWithChildren<DebtRowP
 
     const owed = props.debt.amount * ratio;
 
-    return (
-        <Row className='col-lg-6 col-12'>
-            <Col className='col-6'>
-                <div className='text-center font-little'>{phraseL} {ratio * 100}% of</div>
-                <div className='text-center fw-bold'>£{props.debt.amount}</div>
-            </Col>
-            <Col className='col-6'>
-                <div className='text-center font-little'>{phraseR}</div>
-                <div className={className}>£{owed}</div>
-            </Col>
-        </Row>
+    return (<div className='d-flex'>
+        <div className='flex-fill'>
+            <div className='font-little'>{phraseL} {ratio * 100}% of</div>
+            <div className='fw-bold'>£{props.debt.amount}</div>
+        </div>
+        <div className='flex-fill'>
+            <div className='font-little'>{phraseR}</div>
+            <div className={className}>£{owed}</div>
+        </div>
+    </div>
     );
 })
