@@ -3,7 +3,7 @@ import { Container } from 'react-bootstrap';
 import { UserContext } from '../../App';
 
 interface SideBarRightIP {
-    debtsJson: DebtDetailApiResponse[];
+    debtsJson: DebtDetail[];
 
 }
 export default memo(function SideBarRight(props: PropsWithChildren<SideBarRightIP>) {

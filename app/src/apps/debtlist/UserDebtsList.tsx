@@ -34,7 +34,7 @@ export default memo(function UserDebtsList() {
         <Container fluid={true}>
             <Row>
                 <Col className='col-lg-2 col-md-12 col-sm-12 col-12'>
-                    <p>Side bar left</p>
+                    {/* <p>Side bar left</p> */}
                 </Col>
                 <Col className='col-lg-8 col-md-12 col-sm-12 col-12'>
                     <Row className='border'>

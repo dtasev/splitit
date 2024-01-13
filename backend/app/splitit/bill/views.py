@@ -108,4 +108,9 @@ class DebtView(viewsets.ModelViewSet):
         qs = qs.filter(query)
         serializer = DebtSerializer(qs, many=True)
         headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)
+        return Response({
+            "other_user": User.objects.get(pk=pk).username,
+            "debts": serializer.data
+        },
+                        status=status.HTTP_200_OK,
+                        headers=headers)

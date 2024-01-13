@@ -4,14 +4,13 @@ import { UserContext } from '../../../App';
 import { Button } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendar } from '@fortawesome/free-solid-svg-icons';
 import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons/faCalendarAlt';
 
 interface AddExpenseModalProps {
     onSuccess: () => void;
     onClose?: () => void;
 
-    debt?: DebtDetailApiResponse;
+    debt?: DebtDetail;
     otherUser?: string;
     className?: string;
 }

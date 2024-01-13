@@ -9,13 +9,10 @@ import { Link, useParams } from 'react-router-dom';
 
 
 export default memo(function DebtList() {
-    const [debtsJson, setDebtsJson] = useState<DebtDetailApiResponse[]>([]);
+    const [debtsJson, setDebtsJson] = useState<DebtDetail[]>([]);
     const userCtx = useContext<UserContextI>(UserContext);
     const [editModal, setEditModal] = useState<React.JSX.Element>();
-
     const [otherUser, setOtherUser] = useState<string>("");
-
-
     const { userId } = useParams();
 
     const fetchDebts = () => {
@@ -30,9 +27,9 @@ export default memo(function DebtList() {
         ).then((res) => {
             if (res.status >= 400 && res.status < 500) { throw new Error }
             return res.json();
-        }).then((json: DebtDetailApiResponse[]) => {
-            setDebtsJson(json);
-            setOtherUser(json[0].is_owed_username);
+        }).then((json: DebtDetailApiResponse) => {
+            setDebtsJson(json.debts);
+            setOtherUser(json.other_user);
         }).catch((err) => {
             console.error(err);
             setDebtsJson([]);
@@ -43,7 +40,7 @@ export default memo(function DebtList() {
         setEditModal(undefined);
     }
 
-    const editDebt = (debt: DebtDetailApiResponse) => {
+    const editDebt = (debt: DebtDetail) => {
         setEditModal(<ExpenseModal onSuccess={fetchDebts} onClose={clearEditDebt} debt={debt} otherUser={otherUser} />);
     };
 

@@ -2,8 +2,8 @@ import { PropsWithChildren, memo, } from 'react';
 import DebtRow from './DebtRow';
 
 interface DebtRowFactory {
-    debtsJson: DebtDetailApiResponse[];
-    editDebt: (debt: DebtDetailApiResponse) => void;
+    debtsJson: DebtDetail[];
+    editDebt: (debt: DebtDetail) => void;
     onDelete: () => void;
 }
 export default memo(function DebtRowFactory(props: PropsWithChildren<DebtRowFactory>) {

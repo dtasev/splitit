@@ -1,9 +1,8 @@
 import { PropsWithChildren, memo } from 'react';
-import { Col, Row } from 'react-bootstrap';
 
 interface DebtRowPaidInlineIP {
     owner: boolean
-    debt: DebtDetailApiResponse
+    debt: DebtDetail
 }
 
 export default memo(function DebtRowPaidInline(props: PropsWithChildren<DebtRowPaidInlineIP>) {

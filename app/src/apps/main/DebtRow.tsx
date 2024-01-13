@@ -1,5 +1,5 @@
 import { PropsWithChildren, memo } from 'react';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Container, Row } from 'react-bootstrap';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencil, faXmark } from '@fortawesome/free-solid-svg-icons';
@@ -9,8 +9,8 @@ import { useCookies } from 'react-cookie';
 import './DebtList.css';
 
 interface DebtRowProps {
-    debt: DebtDetailApiResponse;
-    editDebt: (debt: DebtDetailApiResponse) => void;
+    debt: DebtDetail;
+    editDebt: (debt: DebtDetail) => void;
     onDelete: () => void;
 }
 export default memo(function DebtRow(props: PropsWithChildren<DebtRowProps>) {

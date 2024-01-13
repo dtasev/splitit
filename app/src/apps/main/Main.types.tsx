@@ -1,4 +1,4 @@
-interface DebtDetailApiResponse {
+interface DebtDetail {
     id: number
     amount: number
     lent: number
@@ -12,6 +12,10 @@ interface DebtDetailApiResponse {
     is_owed: number
     owner_username: string
     is_owed_username: string
+}
+interface DebtDetailApiResponse {
+    other_user: string,
+    debts: DebtDetail[]
 }
 
 interface UserDetailApiResponse {
