@@ -78,12 +78,12 @@ class DebtView(viewsets.ModelViewSet):
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
-    def update(self, request, *args, **kwargs):
+    def update(self, request, pk=None, **kwargs):
         partial = kwargs.pop('partial', False)
-        instance = self.get_object()
+        # instance = self.get_object()
+        instance = Debt.objects.get(pk=pk)
         data = request.data
-        is_owed_username = request.data.get("is_owed")
-        data["is_owed"] = User.objects.get(username=is_owed_username).pk
+        data["is_owed"] = instance.is_owed.pk
         serializer = self.get_serializer(instance, data=data, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
