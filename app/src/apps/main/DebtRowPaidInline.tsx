@@ -21,7 +21,6 @@ export default memo(function DebtRowPaidInline(props: PropsWithChildren<DebtRowP
     let ratio: number;
     switch (props.debt.ratio) {
         case 100:
-        case 0:
             ratio = 1
             break
         default:

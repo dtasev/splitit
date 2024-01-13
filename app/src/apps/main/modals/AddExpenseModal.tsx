@@ -80,7 +80,7 @@ export default memo(function ExpenseModal(props: PropsWithChildren<AddExpenseMod
     // okay i'll need multiple modals so this button can't be that specific, should take some props name, action etc
     const addExpense = props.debt ? null : <Button variant="warning" onClick={handleShow}>Add expense</Button>;
     // const addExpense = props.debt ? null : <Button variant="dager-outline" onClick={handleSettle}>Add expense</Button>;
-    const defaultDate = new Date().toLocaleDateString("en-CA");
+    const defaultDate = new Date(props.debt?.added || "").toLocaleDateString("en-CA");
 
     return (
         <div className={props.className}>
@@ -92,7 +92,7 @@ export default memo(function ExpenseModal(props: PropsWithChildren<AddExpenseMod
                 <Modal.Body>
                     <div className='input-group mb-3'>
                         <label className='input-group-text' htmlFor="is_owed">With you and: </label>
-                        <input ref={otherE} className='form-control' id='is_owed' name='is_owed' type="text" required defaultValue={props.otherUser || ""} />
+                        <input ref={otherE} className='form-control' id='is_owed' name='is_owed' type="text" required defaultValue={props.otherUser || ""} disabled={true} />
                     </div>
                     <div className='input-group mb-2'>
                         <span className="input-group-text">Description</span>
@@ -106,7 +106,7 @@ export default memo(function ExpenseModal(props: PropsWithChildren<AddExpenseMod
                         <label htmlFor="ratio" className="input-group-text">Ratio</label>
                         <span className='input-group-text'>{ratioPerc}%</span>
                         <div className='mx-2 my-auto mt-2 flex-fill'>
-                            <input ref={ratioE} className='form-range' id='ratio' name='ratio' type="range" min={0} max={100} step={5} defaultValue={props.debt?.ratio || 50} onChange={updateRatioNote} />
+                            <input ref={ratioE} className='form-range' id='ratio' name='ratio' type="range" min={1} max={100} step={1} defaultValue={props.debt?.ratio || 50} onChange={updateRatioNote} />
                         </div>
                     </div>
                     <div className='input-group mb-2'>
