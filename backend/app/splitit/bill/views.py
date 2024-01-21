@@ -68,7 +68,8 @@ class DebtView(viewsets.ModelViewSet):
         data = request.data
 
         # manually set the owner and is_owed
-        data["owner"] = request.user.pk
+        owner = request.data.get("owner")
+        data["owner"] = User.objects.get(username=owner).pk
         is_owed_username = request.data.get("is_owed")
         data["is_owed"] = User.objects.get(username=is_owed_username).pk
 
@@ -82,8 +83,15 @@ class DebtView(viewsets.ModelViewSet):
         partial = kwargs.pop('partial', False)
         # instance = self.get_object()
         instance = Debt.objects.get(pk=pk)
+
         data = request.data
-        data["is_owed"] = instance.is_owed.pk
+
+        # manually set the owner and is_owed
+        owner = request.data.get("owner")
+        data["owner"] = User.objects.get(username=owner).pk
+        is_owed_username = request.data.get("is_owed")
+        data["is_owed"] = User.objects.get(username=is_owed_username).pk
+
         serializer = self.get_serializer(instance, data=data, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)

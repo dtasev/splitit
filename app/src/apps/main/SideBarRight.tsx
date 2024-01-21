@@ -14,6 +14,15 @@ export default memo(function SideBarRight(props: PropsWithChildren<SideBarRightI
         // e.g. if user1 paid £50 for user2 with a ratio of 100 (i.e. user1 paid 100% of the £50) -> user2 owes the full amount
         // if user1 paid £50 for user2 with a ratio of 75 (i.e. user1 paid 75% of the £50) -> user2 owes the remaining 25% of 50
 
+        // ratio 100 = owner requests the full amount, i.e. the other user owes the full amount
+        // ratio 0 = owner owes the full amount to the other user
+        const owner = cv.owner_username === userCtx.username;
+
+        // if (owner && cv.ratio === 0) {
+        //     return acc + cv.amount;
+        // } else if (owner && cv.ratio === 100) {
+        //     return acc - cv.lent;
+        // }
         if (cv.owner_username === userCtx.username) {
             // return acc + (cv.amount * ratio);
             return acc + cv.lent;

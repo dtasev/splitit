@@ -37,19 +37,20 @@ export default memo(function DebtRow(props: PropsWithChildren<DebtRowProps>) {
 
     return (
         <Container className='border border-collapse justify-content-center'>
-            <Row className='my-auto'>
-                <div className='col-lg-2 col-6'>{date}</div>
-                <div className='text-lg-start col-lg-2 col-6'>{props.debt.title}</div>
-                <div className='col-lg-6 col-12'>
-                    <DebtRowPaidInline owner={cookies.username === props.debt.owner_username} debt={props.debt} />
-                </div>
+            <Row className='my-auto hover'>
+                <Row className='col-lg-10 col-12 mb-lg-0 mb-2' role='button' onClick={() => props.editDebt(props.debt)}>
+                    <div className='col-3'>{date}</div>
+                    <div className='col-3'>{props.debt.title}</div>
+                    <div className='col-6'>
+                        <DebtRowPaidInline owner={cookies.username === props.debt.owner_username} debt={props.debt} />
+                    </div>
+                </Row>
                 <div className='col-lg-2 col-12 my-auto'>
                     <div className='d-flex border rounded'>
-                        <div className='flex-fill border' role='button' onClick={() => props.editDebt(props.debt)}><FontAwesomeIcon icon={faPencil}></FontAwesomeIcon></div>
                         <div className='flex-fill border' role='button' onClick={deleteDebt}><FontAwesomeIcon icon={faXmark}></FontAwesomeIcon></div>
                     </div>
-                </div >
-            </Row >
-        </Container >
+                </div>
+            </Row>
+        </Container>
     );
 })

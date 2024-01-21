@@ -10,6 +10,7 @@ import {
 } from "react-router-dom";
 import DebtList from './apps/main/DebtList.tsx';
 import UserDebtsList from './apps/debtlist/UserDebtsList.tsx';
+import RunningApp from './apps/running/RunningApp.tsx';
 
 
 const router = createBrowserRouter([
@@ -24,9 +25,14 @@ const router = createBrowserRouter([
       {
         path: ":userId",
         element: <DebtList />,
+      },
+      {
+        path: "running",
+        element: <RunningApp />
       }
     ]
-  }]);
+  }
+]);
 
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

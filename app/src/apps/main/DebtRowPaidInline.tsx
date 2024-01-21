@@ -8,19 +8,25 @@ interface DebtRowPaidInlineIP {
 export default memo(function DebtRowPaidInline(props: PropsWithChildren<DebtRowPaidInlineIP>) {
     let phraseL: string, phraseR: string, className: string;
 
-    if (props.owner) {
-        phraseL = "you paid";
-        phraseR = `you lent ${props.debt.is_owed_username}`;
-        className = "text-center fw-bold text-success";
-    } else {
+    if (props.debt.ratio === 0) {
+        phraseL = `${props.debt.is_owed_username} paid`;
+        phraseR = `${props.debt.is_owed_username} lent you`;
+        className = "text-center fw-bold text-danger";
+    }
+    else if (!props.owner) {
         phraseL = `${props.debt.owner_username} paid`;
         phraseR = `${props.debt.owner_username} lent you`;
         className = "text-center fw-bold text-danger";
+    } else {
+        phraseL = "you paid";
+        phraseR = `you lent ${props.debt.is_owed_username}`;
+        className = "text-center fw-bold text-success";
     }
 
     let ratio: number;
     switch (props.debt.ratio) {
         case 100:
+        case 0:
             ratio = 1
             break
         default:
@@ -31,7 +37,7 @@ export default memo(function DebtRowPaidInline(props: PropsWithChildren<DebtRowP
 
     return (<div className='d-flex'>
         <div className='flex-fill'>
-            <div className='font-little'>{phraseL} {ratio * 100}% of</div>
+            <div className='font-little'>{phraseL}</div>
             <div className='fw-bold'>£{props.debt.amount}</div>
         </div>
         <div className='flex-fill'>
