@@ -16,13 +16,6 @@ export default memo(function SideBarRight(props: PropsWithChildren<SideBarRightI
 
         // ratio 100 = owner requests the full amount, i.e. the other user owes the full amount
         // ratio 0 = owner owes the full amount to the other user
-        const owner = cv.owner_username === userCtx.username;
-
-        // if (owner && cv.ratio === 0) {
-        //     return acc + cv.amount;
-        // } else if (owner && cv.ratio === 100) {
-        //     return acc - cv.lent;
-        // }
         if (cv.owner_username === userCtx.username) {
             // return acc + (cv.amount * ratio);
             return acc + cv.lent;
@@ -40,7 +33,7 @@ export default memo(function SideBarRight(props: PropsWithChildren<SideBarRightI
     } else if (totalOwed > 0) {
         msg = `are owed £${totalOwed}`
     } else {
-        msg = `owe £${Math.abs(totalOwed)}`
+        msg = `owe £${Math.round(Math.abs(totalOwed) * 100) / 100}`
     }
     return (<Container>You {msg}</Container>);
 })
